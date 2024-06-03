@@ -36,7 +36,7 @@ struct CurrentUser {
 public:
   /// id of the logged in user
   int id;
-}
+};
 
 class SocialNetworkWindow : public QMainWindow {
   Q_OBJECT

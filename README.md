@@ -1,19 +1,14 @@
-# CSCI 62
+# Social Network
 
-## Project 1
-Contains code to "model" a social network with connections between users.
-
-### Cli
-```bash
-# zig build test
-zig build run
-```
-
-### Ui
+## Building
 requires qt >= 6
 ```bash
 mkdir build
 cd build
 qmake ..
 make
+```
+OR
+```bash
+nix run
 ```

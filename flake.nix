@@ -12,26 +12,26 @@
     utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
     in {
+      packages.default = pkgs.stdenv.mkDerivation {
+        pname = "social";
+        version = "0.1.0";
+
+        src = ./.;
+        # buildPhase = ''
+        #   mkdir -p build
+        #   cd build || exit
+        #   ${pkgs.qt6.qmake}/bin/qmake ..
+        #   ${pkgs.gnumake}/bin/make
+        # '';
+
+        nativeBuildInputs = with pkgs; [ 
+        qt6.qmake 
+qt6.wrapQtAppsHook
+        ];
+        buildInputs = [ ];
+      };
       devShells = rec {
-        # default = tbonet;
-        tbonet = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            # pyright
-            (python3.withPackages (ps:
-              with ps; [
-                ipython
-                jupyter
-                notebook
-
-                numpy
-                pandas
-
-                matplotlib
-                scikit-learn
-              ]))
-          ];
-          # shellHook = "jupyter notebook";
-        };
+        default = qnetwork;
         qnetwork = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [ qt6.qmake ];
           buildInputs = with pkgs; [];
