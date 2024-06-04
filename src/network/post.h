@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <set>
 #include <string>
+#include <ctime>
 
 class Post {
 private:
@@ -13,11 +14,13 @@ private:
 
   std::set<int> likes;
 
+  /// Date of the post in unix time
+  std::time_t date;
+
 public:
   Post();
   Post(int messageId, int ownerId, std::string message, std::set<int> likes);
   Post(int messageId, int ownerId, std::string message, int likes) {
-
     std::set<int> tlikes;
     for (int i = 0; i < likes; i++) {
       tlikes.insert(rand());
@@ -25,6 +28,9 @@ public:
 
     *this = Post(messageId, ownerId, message, tlikes);
   }
+
+  std::string getHumanDate() { return std::asctime(std::localtime(&date)); }
+  std::time_t getDate() { return date; }
 
   int getMessageId();
   int getOwnerId();

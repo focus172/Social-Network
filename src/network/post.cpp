@@ -16,7 +16,11 @@ Post::Post(int messageId, int ownerId, std::string message,
   this->message_ = message;
   this->messageId_ = messageId;
   this->ownerId_ = ownerId;
+
+  this->date = std::time(nullptr);
+
 }
+
 std::string Post::toString() {
   std::stringstream buf;
   buf << this->message_ << " Liked by " << likes.size() << " people.";
