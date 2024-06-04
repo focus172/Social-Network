@@ -1,9 +1,9 @@
 #include "network.h"
 #include "post.h"
 #include "user.h"
-#include "util.h"
 
-#include "json.hpp"
+#include "../json.hpp"
+#include "../util.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -650,7 +650,6 @@ cleanup:
   return -1;
 }
 
-
 int Network::read_posts_json(const char *fname) {
   nlohmann::json j;
 
@@ -728,7 +727,7 @@ int Network::write_posts_json(const char *fname) {
 
   for (auto u : this->users_) {
     auto s = u->getPosts();
-        // std::dynamic_pointer_cast<k>(const shared_ptr<Up> &r)
+    // std::dynamic_pointer_cast<k>(const shared_ptr<Up> &r)
 
     for (auto p : s) {
       j.push_back({{"author", p->getOwnerId()},

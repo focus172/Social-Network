@@ -24,6 +24,13 @@ QT_BEGIN_NAMESPACE
 class ProfilePageUi {
 public:
   QGridLayout *profilegrid;
+
+  QHBoxLayout *topbardiv;
+  QLabel *topbar_label;
+  QSpacerItem *topbar_spacer;
+  QPushButton *profile_add;
+  QPushButton *profile_home;
+
   QHBoxLayout *name_div;
   QSpacerItem *profile_name_pad_left;
   QLabel *profile_label;

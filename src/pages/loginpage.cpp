@@ -1,5 +1,6 @@
 #include "loginpage.h"
 
+/* ******************************* */
 QT_BEGIN_NAMESPACE
 
 LoginPageUi::LoginPageUi(QWidget *loginpage) {
@@ -21,9 +22,8 @@ LoginPageUi::LoginPageUi(QWidget *loginpage) {
   button->setEnabled(true);
   centergrid->addWidget(button, 3, 1, 1, 1);
 
-  login_error = new QLabel(loginpage);
-  login_error->setObjectName("login_error");
-  centergrid->addWidget(login_error, 4, 1, 1, 1);
+  errortext = new QLabel(loginpage);
+  centergrid->addWidget(errortext, 4, 1, 1, 1);
   /* ******* End Login Items ********** */
 
   /* ********** Spacers *********** */
@@ -51,16 +51,20 @@ void LoginPageUi::reset() {
   login_input->setText(QString());
   button->setText(
       QCoreApplication::translate("SocialNetworkWindow", "Login", nullptr));
-  login_error->setText(QCoreApplication::translate(
-      "SocialNetworkWindow", "User {name} doesn't exists.", nullptr));
+
+  // Reset and hide error
+  errortext->setText(
+      QCoreApplication::translate("SocialNetworkWindow", "~~~~~", nullptr));
+  errortext->hide();
 }
 
 QT_END_NAMESPACE
+/* ******************************* */
 
 LoginPage::LoginPage(QWidget *parent, Network *const n)
     : QWidget(parent), ui(new LoginPageUi(this)), network(n) {
 
-  ui->login_error->hide();
+  ui->errortext->hide();
 
   QObject::connect(ui->button, &QPushButton::clicked, this, &LoginPage::login);
 }
@@ -73,9 +77,10 @@ void LoginPage::login() {
 
   int id = network->getId(s);
   if (id < 0) {
-    this->ui->login_error->show();
-    this->ui->login_error->setText(QString::asprintf("No user: %s", s.c_str()));
+    this->ui->errortext->setText(QString::asprintf("No user: %s", s.c_str()));
+    this->ui->errortext->show();
   } else {
+    ui->errortext->hide();
     emit loggedin(id);
   }
 }

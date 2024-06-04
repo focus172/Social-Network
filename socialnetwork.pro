@@ -10,24 +10,22 @@ CONFIG += c++17
 
 SOURCES += \
     src/main.cpp \
-    src/network.cpp \
-    src/post.cpp \
-    src/postwidget.cpp \
-    src/user.cpp \
-    src/socialnetworkwindow.cpp \
-    src/loginpage.cpp \
-    src/profilepage.cpp
+    src/network/network.cpp \
+    src/network/post.cpp \
+    src/network/user.cpp \
+    src/widgets/postwidget.cpp \
+    src/pages/loginpage.cpp \
+    src/pages/profilepage.cpp \
+    src/socialnetworkwindow.cpp
 
 HEADERS += \
-    src/network.h \
-    src/post.h \
-    src/postwidget.h \
-    src/user.h \
-    src/socialnetworkwindow.h \
-    src/loginpage.h \
-    src/profilepage.h
-
-# FORMS += src/socialnetworkwindow.ui
+    src/network/network.h \
+    src/network/post.h \
+    src/network/user.h \
+    src/widgets/postwidget.h \
+    src/pages/loginpage.h \
+    src/pages/profilepage.h \
+    src/socialnetworkwindow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -3,12 +3,7 @@
 ## Building
 requires qt >= 6
 ```bash
-mkdir build
-cd build
-qmake ..
-make
-```
-OR
-```bash
-nix run
+./mk.sh
+# OR
+nix build
 ```

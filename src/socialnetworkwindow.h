@@ -22,9 +22,9 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
-#include "loginpage.h"
-#include "network.h"
-#include "profilepage.h"
+#include "network/network.h"
+#include "pages/loginpage.h"
+#include "pages/profilepage.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -32,12 +32,6 @@ class SocialNetworkWindowUi {
 public:
   QWidget *centralwidget;
   QGridLayout *grid;
-
-  QHBoxLayout *topbardiv;
-  QLabel *topbar_label;
-  QSpacerItem *topbar_spacer;
-  QPushButton *profile_add;
-  QPushButton *profile_home;
 
   QStackedWidget *viewstack;
   LoginPage *loginpage;

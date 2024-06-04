@@ -9,7 +9,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 
-#include "network.h"
+#include "../network/network.h"
 
 QT_BEGIN_NAMESPACE
 /* ******************* */
@@ -21,7 +21,7 @@ public:
   QLabel *login_label;
   QLineEdit *login_input;
   QPushButton *button;
-  QLabel *login_error;
+  QLabel *errortext;
 
   QSpacerItem *spacer_left;
   QSpacerItem *spacer_top;

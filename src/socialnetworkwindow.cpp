@@ -1,6 +1,6 @@
 #include "socialnetworkwindow.h"
-#include "postwidget.h"
 #include "util.h"
+#include "widgets/postwidget.h"
 #include <cstdlib>
 
 /* ******************************************* */
@@ -8,39 +8,14 @@ QT_BEGIN_NAMESPACE
 
 SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
                                              Network *const net) {
-  if (SocialNetworkWindow->objectName().isEmpty())
-    SocialNetworkWindow->setObjectName("SocialNetworkWindow");
   SocialNetworkWindow->resize(800, 600);
 
   centralwidget = new QWidget(SocialNetworkWindow);
-  centralwidget->setObjectName("centralwidget");
 
+  // grid is used so that items appear in center of screen
   grid = new QGridLayout(centralwidget);
-  grid->setObjectName("grid");
-
-  /* ******* Top Bar *********** */
-  topbardiv = new QHBoxLayout();
-  topbardiv->setObjectName("topbardiv");
-
-  topbar_label = new QLabel(centralwidget);
-  topbardiv->addWidget(topbar_label);
-
-  topbar_spacer =
-      new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
-  topbardiv->addItem(topbar_spacer);
-
-  profile_add = new QPushButton(centralwidget);
-  topbardiv->addWidget(profile_add);
-
-  profile_home = new QPushButton(centralwidget);
-  topbardiv->addWidget(profile_home);
-
-  grid->addLayout(topbardiv, 0, 0, 1, 1);
-
-  /* ********* End Top Bar *********** */
 
   viewstack = new QStackedWidget(centralwidget);
-  viewstack->setObjectName("main_view");
 
   loginpage = new LoginPage(centralwidget, net);
   viewstack->addWidget(loginpage);
@@ -48,7 +23,7 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   profilepage = new ProfilePage(centralwidget);
   viewstack->addWidget(profilepage);
 
-  grid->addWidget(viewstack, 1, 0, 1, 1);
+  grid->addWidget(viewstack, 0, 0, 1, 1);
 
   SocialNetworkWindow->setCentralWidget(centralwidget);
 
@@ -67,19 +42,13 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
 
 void SocialNetworkWindowUi::reset(QMainWindow *SocialNetworkWindow) {
   SocialNetworkWindow->setWindowTitle(QCoreApplication::translate(
-      "SocialNetworkWindow", "ClickGameWindow", nullptr));
-  topbar_label->setText(QCoreApplication::translate("SocialNetworkWindow",
-                                                    "Social Network", nullptr));
-  profile_add->setText(
-      QCoreApplication::translate("SocialNetworkWindow", "Add", nullptr));
-  profile_home->setText(
-      QCoreApplication::translate("SocialNetworkWindow", "Home", nullptr));
+      "SocialNetworkWindow", "Social Network", nullptr));
 }
 
 QT_END_NAMESPACE
 /* ******************************************* */
 
-SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
+SocialNetworkWindow::SocialNetworkWindow()
     : QMainWindow(nullptr), curr(), user() {
 
   int ret = network.readUsers("users.txt");
@@ -100,7 +69,6 @@ SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
 
   ui = new SocialNetworkWindowUi(this, &network);
 
-  // ui->login_error->hide();
   // ui->profile_friends_table->setColumnCount(1);
 
   // ui->profile_home->hide();

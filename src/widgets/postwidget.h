@@ -1,7 +1,7 @@
 #ifndef POSTWIDGET_H
 #define POSTWIDGET_H
 
-#include "post.h"
+#include "../network/post.h"
 #include <QWidget>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>

@@ -6,6 +6,26 @@ ProfilePageUi::ProfilePageUi(QWidget *ProfilePage) {
   profilegrid = new QGridLayout(ProfilePage);
   profilegrid->setObjectName("gridLayout");
 
+  /* ******* Top Bar *********** */
+  topbardiv = new QHBoxLayout();
+  topbardiv->setObjectName("topbardiv");
+
+  topbar_label = new QLabel(ProfilePage);
+  topbardiv->addWidget(topbar_label);
+
+  topbar_spacer =
+      new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+  topbardiv->addItem(topbar_spacer);
+
+  profile_add = new QPushButton(ProfilePage);
+  topbardiv->addWidget(profile_add);
+
+  profile_home = new QPushButton(ProfilePage);
+  topbardiv->addWidget(profile_home);
+
+  profilegrid->addLayout(topbardiv, 0, 0, 1, 1);
+  /* ********* End Top Bar *********** */
+
   name_div = new QHBoxLayout();
   name_div->setObjectName("name_div");
   profile_name_pad_left =
@@ -116,6 +136,12 @@ void ProfilePageUi::reset() {
       QCoreApplication::translate("SocialNetworkWindow", "Friends", nullptr));
   profile_suggested_lable->setText(QCoreApplication::translate(
       "SocialNetworkWindow", "Suggested Friends", nullptr));
+  topbar_label->setText(QCoreApplication::translate("SocialNetworkWindow",
+                                                    "Social Network", nullptr));
+  profile_add->setText(
+      QCoreApplication::translate("SocialNetworkWindow", "Add", nullptr));
+  profile_home->setText(
+      QCoreApplication::translate("SocialNetworkWindow", "Home", nullptr));
 }
 
 QT_END_NAMESPACE
