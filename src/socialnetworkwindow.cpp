@@ -6,14 +6,21 @@
 SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
     : QMainWindow(nullptr), user(), curr() {
 
-  // SocialNetworkWindow->setCentralWidget(centralwidget);
-
   int ret = network.readUsers("users.txt");
-  if (ret < 0)
-    throw;
+  if (ret < 0) {
+    // try backup location
+    ret = network.readUsers("etc/users.txt");
+    if (ret < 0)
+      throw;
+  }
+
   ret = network.readPosts("posts.txt");
-  if (ret < 0)
-    throw;
+  if (ret < 0) {
+    // try backup location
+    ret = network.readPosts("etc/posts.txt");
+    if (ret < 0)
+      throw;
+  }
 
   ui = new SocialNetworkWindowUi(this);
 
