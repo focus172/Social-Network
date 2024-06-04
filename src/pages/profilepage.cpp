@@ -17,6 +17,9 @@ ProfilePageUi::ProfilePageUi(QWidget *ProfilePage) {
       new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
   topbardiv->addItem(topbar_spacer);
 
+  make_post = new QPushButton(ProfilePage);
+  topbardiv->addWidget(make_post);
+
   profile_add = new QPushButton(ProfilePage);
   topbardiv->addWidget(profile_add);
 
@@ -138,6 +141,8 @@ void ProfilePageUi::reset() {
       "SocialNetworkWindow", "Suggested Friends", nullptr));
   topbar_label->setText(QCoreApplication::translate("SocialNetworkWindow",
                                                     "Social Network", nullptr));
+
+  make_post->setText("Post!");
   profile_add->setText(
       QCoreApplication::translate("SocialNetworkWindow", "Add", nullptr));
   profile_home->setText(
@@ -146,7 +151,31 @@ void ProfilePageUi::reset() {
 
 QT_END_NAMESPACE
 
-ProfilePage::ProfilePage(QWidget *parent) : QWidget(parent) {
-  ui = new ProfilePageUi(this);
+ProfilePage::ProfilePage(QWidget *parent) : QWidget(parent), ui(new ProfilePageUi(this)) {
+  QObject::connect(ui->make_post, &QPushButton::clicked, this, &ProfilePage::makepost);
 }
+
 ProfilePage::~ProfilePage() { delete ui; }
+
+void ProfilePage::makepost() { emit goto_makepost(); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,4 @@
 #include "socialnetworkwindow.h"
-#include "util.h"
-#include "widgets/postwidget.h"
-#include <cstdlib>
 
 /* ******************************************* */
 QT_BEGIN_NAMESPACE
@@ -9,12 +6,11 @@ QT_BEGIN_NAMESPACE
 SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
                                              Network *const net) {
   SocialNetworkWindow->resize(800, 600);
-
   centralwidget = new QWidget(SocialNetworkWindow);
 
+  /* ***************** Page Setup *************** */
   // grid is used so that items appear in center of screen
   grid = new QGridLayout(centralwidget);
-
   viewstack = new QStackedWidget(centralwidget);
 
   loginpage = new LoginPage(centralwidget, net);
@@ -23,9 +19,12 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   profilepage = new ProfilePage(centralwidget);
   viewstack->addWidget(profilepage);
 
-  grid->addWidget(viewstack, 0, 0, 1, 1);
+  makepostpage = new MakepostPage(centralwidget);
+  viewstack->addWidget(makepostpage);
 
+  grid->addWidget(viewstack, 0, 0);
   SocialNetworkWindow->setCentralWidget(centralwidget);
+  /* ************** End Page Setup *************** */
 
   /* *************** Window Setup ************* */
   menubar = new QMenuBar(SocialNetworkWindow);
@@ -83,6 +82,13 @@ SocialNetworkWindow::SocialNetworkWindow()
                    &SocialNetworkWindow::showprofile);
 
   // profile ports
+  QObject::connect(ui->profilepage, &ProfilePage::goto_makepost, this,
+                   &SocialNetworkWindow::show_makepost);
+
+  // make post connection
+  QObject::connect(ui->makepostpage, &MakepostPage::submit_post, this,
+                   &SocialNetworkWindow::add_post);
+
   // QObject::connect(ui->profile_home, &QPushButton::clicked, this,
   //                  &SocialNetworkWindow::gohome);
   // QObject::connect(ui->profile_add, &QPushButton::clicked, this,
@@ -94,7 +100,26 @@ SocialNetworkWindow::SocialNetworkWindow()
   //                  this, &SocialNetworkWindow::addsuggestedfriend);
 }
 
+
 SocialNetworkWindow::~SocialNetworkWindow() { delete ui; }
+
+void SocialNetworkWindow::show_makepost() {
+  this->ui->makepostpage->load_page(this->curr.id);
+  this->ui->viewstack->setCurrentIndex(2);
+}
+
+void SocialNetworkWindow::add_post(Post *p) {
+  User *u = this->network.getUser(p->getOwnerId());
+  if (u == nullptr) {
+    printf("post is not asociated with any user\n");
+    this->ui->viewstack->setCurrentIndex(1);
+    return;
+  }
+
+  printf("TODO: fix post not being added by uncommenting next line\n");
+  // u->addPost(p);
+  this->ui->viewstack->setCurrentIndex(1);
+}
 
 void SocialNetworkWindow::showprofile(int newuser) {
   if (ui->viewstack->currentIndex() == 0) {

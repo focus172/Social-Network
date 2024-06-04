@@ -13,6 +13,7 @@ SOURCES += \
     src/network/network.cpp \
     src/network/post.cpp \
     src/network/user.cpp \
+    src/pages/makepostpage.cpp \
     src/widgets/postwidget.cpp \
     src/pages/loginpage.cpp \
     src/pages/profilepage.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     src/network/network.h \
     src/network/post.h \
     src/network/user.h \
+    src/pages/makepostpage.h \
     src/widgets/postwidget.h \
     src/pages/loginpage.h \
     src/pages/profilepage.h \

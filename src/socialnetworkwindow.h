@@ -25,6 +25,7 @@
 #include "network/network.h"
 #include "pages/loginpage.h"
 #include "pages/profilepage.h"
+#include "pages/makepostpage.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -36,6 +37,7 @@ public:
   QStackedWidget *viewstack;
   LoginPage *loginpage;
   ProfilePage *profilepage;
+  MakepostPage *makepostpage;
 
   QMenuBar *menubar;
   QStatusBar *statusbar;
@@ -88,6 +90,9 @@ public:
   ~SocialNetworkWindow();
 
   void showprofile(int user);
+  void show_makepost();
+
+  void add_post(Post *p);
 
   void gohome();
   void gofriend(int row, int col);

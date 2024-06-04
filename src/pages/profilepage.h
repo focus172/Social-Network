@@ -28,6 +28,7 @@ public:
   QHBoxLayout *topbardiv;
   QLabel *topbar_label;
   QSpacerItem *topbar_spacer;
+  QPushButton *make_post;
   QPushButton *profile_add;
   QPushButton *profile_home;
 
@@ -47,14 +48,22 @@ public:
   ProfilePageUi(QWidget *ProfilePage);
 
   void reset();
+
 };
 
 QT_END_NAMESPACE
 
 class ProfilePage : public QWidget {
+  Q_OBJECT
+
 public:
   ProfilePage(QWidget *parent = nullptr);
   ~ProfilePage();
+
+  void makepost();
+
+signals:
+  void goto_makepost();
 
 private:
   ProfilePageUi *ui;
