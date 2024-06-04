@@ -14,14 +14,16 @@ SOURCES += \
     src/post.cpp \
     src/postwidget.cpp \
     src/user.cpp \
-    src/socialnetworkwindow.cpp
+    src/socialnetworkwindow.cpp \
+    src/loginpage.cpp
 
 HEADERS += \
     src/network.h \
     src/post.h \
     src/postwidget.h \
     src/user.h \
-    src/socialnetworkwindow.h
+    src/socialnetworkwindow.h \
+    src/loginpage.h
 
 # FORMS += src/socialnetworkwindow.ui
 
