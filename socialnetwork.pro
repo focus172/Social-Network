@@ -15,7 +15,8 @@ SOURCES += \
     src/postwidget.cpp \
     src/user.cpp \
     src/socialnetworkwindow.cpp \
-    src/loginpage.cpp
+    src/loginpage.cpp \
+    src/profilepage.cpp
 
 HEADERS += \
     src/network.h \
@@ -23,7 +24,8 @@ HEADERS += \
     src/postwidget.h \
     src/user.h \
     src/socialnetworkwindow.h \
-    src/loginpage.h
+    src/loginpage.h \
+    src/profilepage.h
 
 # FORMS += src/socialnetworkwindow.ui
 

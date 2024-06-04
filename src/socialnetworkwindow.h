@@ -1,6 +1,9 @@
 #ifndef SOCIALNETWORKWINDOW_H
 #define SOCIALNETWORKWINDOW_H
 
+#include <QAbstractItemView>
+#include <QMainWindow>
+#include <QStringListModel>
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
@@ -20,6 +23,7 @@
 #include <QtWidgets/QWidget>
 
 #include "loginpage.h"
+#include "network.h"
 #include "profilepage.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,97 +32,28 @@ class SocialNetworkWindowUi {
 public:
   QWidget *centralwidget;
   QGridLayout *grid;
+
   QHBoxLayout *topbardiv;
-  QLabel *label;
-  QSpacerItem *horizontalSpacer_3;
+  QLabel *topbar_label;
+  QSpacerItem *topbar_spacer;
   QPushButton *profile_add;
   QPushButton *profile_home;
-  QStackedWidget *viewstack;
-  QMenuBar *menubar;
-  QStatusBar *statusbar;
 
+  QStackedWidget *viewstack;
   LoginPage *loginpage;
   ProfilePage *profilepage;
 
-  SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow) {
-    if (SocialNetworkWindow->objectName().isEmpty())
-      SocialNetworkWindow->setObjectName("SocialNetworkWindow");
-    SocialNetworkWindow->resize(800, 600);
+  QMenuBar *menubar;
+  QStatusBar *statusbar;
 
-    centralwidget = new QWidget(SocialNetworkWindow);
-    centralwidget->setObjectName("centralwidget");
+  SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow, Network *const net);
 
-    grid = new QGridLayout(centralwidget);
-    grid->setObjectName("grid");
-
-    topbardiv = new QHBoxLayout();
-    topbardiv->setObjectName("topbardiv");
-    label = new QLabel(centralwidget);
-    label->setObjectName("label");
-
-    topbardiv->addWidget(label);
-
-    horizontalSpacer_3 =
-        new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-    topbardiv->addItem(horizontalSpacer_3);
-
-    profile_add = new QPushButton(centralwidget);
-    profile_add->setObjectName("profile_add");
-
-    topbardiv->addWidget(profile_add);
-
-    profile_home = new QPushButton(centralwidget);
-    profile_home->setObjectName("profile_home");
-
-    topbardiv->addWidget(profile_home);
-
-    grid->addLayout(topbardiv, 0, 0, 1, 1);
-
-    viewstack = new QStackedWidget(centralwidget);
-    viewstack->setObjectName("main_view");
-
-    loginpage = new LoginPage(centralwidget);
-    viewstack->addWidget(loginpage);
-
-    // profilepage = new ProfilePage(centralwidget);
-    // viewstack->addWidget(profilepage);
-
-    grid->addWidget(viewstack, 1, 0, 1, 1);
-
-    SocialNetworkWindow->setCentralWidget(centralwidget);
-
-    /* *************** Window Setup ************* */
-    menubar = new QMenuBar(SocialNetworkWindow);
-    menubar->setObjectName("menubar");
-    menubar->setGeometry(QRect(0, 0, 800, 19));
-    SocialNetworkWindow->setMenuBar(menubar);
-    statusbar = new QStatusBar(SocialNetworkWindow);
-    statusbar->setObjectName("statusbar");
-    SocialNetworkWindow->setStatusBar(statusbar);
-    /* ************* End Window Setup ************ */
-
-    reset(SocialNetworkWindow);
-  }
-
-  void reset(QMainWindow *SocialNetworkWindow) {
-    SocialNetworkWindow->setWindowTitle(QCoreApplication::translate(
-        "SocialNetworkWindow", "ClickGameWindow", nullptr));
-    label->setText(QCoreApplication::translate("SocialNetworkWindow",
-                                               "Social Network", nullptr));
-    profile_add->setText(
-        QCoreApplication::translate("SocialNetworkWindow", "Add", nullptr));
-    profile_home->setText(
-        QCoreApplication::translate("SocialNetworkWindow", "Home", nullptr));
-  }
+  void reset(QMainWindow *SocialNetworkWindow);
 };
 
 QT_END_NAMESPACE
 
-#include "network.h"
-#include <QAbstractItemView>
-#include <QMainWindow>
-#include <QStringListModel>
+/* *********************************************************************** */
 
 class SelectedUser {
 public:
@@ -145,12 +80,6 @@ public:
   QStringListModel *model;
 };
 
-struct WindowOptions {
-public:
-  char *posts;
-  char *users;
-};
-
 struct CurrentUser {
 public:
   /// id of the logged in user
@@ -161,16 +90,14 @@ class SocialNetworkWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  SocialNetworkWindow(); // WindowOptions options);
+  SocialNetworkWindow();
   ~SocialNetworkWindow();
 
-  void login();
-
   void showprofile(int user);
-  void gohome();
-  void addfriend();
 
+  void gohome();
   void gofriend(int row, int col);
+  void addfriend();
   void addsuggestedfriend(int row, int col);
 
 private:
@@ -180,27 +107,5 @@ private:
   CurrentUser curr;
   SelectedUser user;
 };
-
-// topbardiv = new QHBoxLayout();
-// topbardiv->setObjectName("topbardiv");
-
-// label = new QLabel(centralwidget);
-// label->setObjectName("label");
-
-// topbardiv->addWidget(label);
-
-// topbar_spacer =
-//     new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-// topbardiv->addItem(topbar_spacer);
-
-// profile_add = new QPushButton(centralwidget);
-// profile_add->setObjectName("profile_add");
-
-// topbardiv->addWidget(profile_add);
-
-// profile_home = new QPushButton(centralwidget);
-// profile_home->setObjectName("profile_home");
-
-// topbardiv->addWidget(profile_home);
 
 #endif // SOCIALNETWORKWINDOW_H

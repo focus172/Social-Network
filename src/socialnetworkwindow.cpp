@@ -3,8 +3,84 @@
 #include "util.h"
 #include <cstdlib>
 
+/* ******************************************* */
+QT_BEGIN_NAMESPACE
+
+SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
+                                             Network *const net) {
+  if (SocialNetworkWindow->objectName().isEmpty())
+    SocialNetworkWindow->setObjectName("SocialNetworkWindow");
+  SocialNetworkWindow->resize(800, 600);
+
+  centralwidget = new QWidget(SocialNetworkWindow);
+  centralwidget->setObjectName("centralwidget");
+
+  grid = new QGridLayout(centralwidget);
+  grid->setObjectName("grid");
+
+  /* ******* Top Bar *********** */
+  topbardiv = new QHBoxLayout();
+  topbardiv->setObjectName("topbardiv");
+
+  topbar_label = new QLabel(centralwidget);
+  topbardiv->addWidget(topbar_label);
+
+  topbar_spacer =
+      new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+  topbardiv->addItem(topbar_spacer);
+
+  profile_add = new QPushButton(centralwidget);
+  topbardiv->addWidget(profile_add);
+
+  profile_home = new QPushButton(centralwidget);
+  topbardiv->addWidget(profile_home);
+
+  grid->addLayout(topbardiv, 0, 0, 1, 1);
+
+  /* ********* End Top Bar *********** */
+
+  viewstack = new QStackedWidget(centralwidget);
+  viewstack->setObjectName("main_view");
+
+  loginpage = new LoginPage(centralwidget, net);
+  viewstack->addWidget(loginpage);
+
+  profilepage = new ProfilePage(centralwidget);
+  viewstack->addWidget(profilepage);
+
+  grid->addWidget(viewstack, 1, 0, 1, 1);
+
+  SocialNetworkWindow->setCentralWidget(centralwidget);
+
+  /* *************** Window Setup ************* */
+  menubar = new QMenuBar(SocialNetworkWindow);
+  menubar->setObjectName("menubar");
+  menubar->setGeometry(QRect(0, 0, 800, 19));
+  SocialNetworkWindow->setMenuBar(menubar);
+  statusbar = new QStatusBar(SocialNetworkWindow);
+  statusbar->setObjectName("statusbar");
+  SocialNetworkWindow->setStatusBar(statusbar);
+  /* ************* End Window Setup ************ */
+
+  reset(SocialNetworkWindow);
+}
+
+void SocialNetworkWindowUi::reset(QMainWindow *SocialNetworkWindow) {
+  SocialNetworkWindow->setWindowTitle(QCoreApplication::translate(
+      "SocialNetworkWindow", "ClickGameWindow", nullptr));
+  topbar_label->setText(QCoreApplication::translate("SocialNetworkWindow",
+                                                    "Social Network", nullptr));
+  profile_add->setText(
+      QCoreApplication::translate("SocialNetworkWindow", "Add", nullptr));
+  profile_home->setText(
+      QCoreApplication::translate("SocialNetworkWindow", "Home", nullptr));
+}
+
+QT_END_NAMESPACE
+/* ******************************************* */
+
 SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
-    : QMainWindow(nullptr), user(), curr() {
+    : QMainWindow(nullptr), curr(), user() {
 
   int ret = network.readUsers("users.txt");
   if (ret < 0) {
@@ -22,7 +98,7 @@ SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
       throw;
   }
 
-  ui = new SocialNetworkWindowUi(this);
+  ui = new SocialNetworkWindowUi(this, &network);
 
   // ui->login_error->hide();
   // ui->profile_friends_table->setColumnCount(1);
@@ -34,11 +110,11 @@ SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
   // auto post = new postwidget(p, &this->curr.id, ui->loginpage);
   // ui->gridLayout_2->addWidget(post);
 
-  // // login ports
-  // QObject::connect(ui->login_button, &QPushButton::clicked, this,
-  //                  &SocialNetworkWindow::login);
+  // login ports
+  QObject::connect(ui->loginpage, &LoginPage::loggedin, this,
+                   &SocialNetworkWindow::showprofile);
 
-  // // profile ports
+  // profile ports
   // QObject::connect(ui->profile_home, &QPushButton::clicked, this,
   //                  &SocialNetworkWindow::gohome);
   // QObject::connect(ui->profile_add, &QPushButton::clicked, this,
@@ -52,26 +128,15 @@ SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
 
 SocialNetworkWindow::~SocialNetworkWindow() { delete ui; }
 
-void SocialNetworkWindow::login(){
-    // auto t = this->ui->login_input->text();
-    // std::string s = t.toStdString();
-
-    // int id = network.getId(s);
-    // if (id < 0) {
-    //   this->ui->login_error->show();
-    //   this->ui->login_error->setText(
-    //       QString::asprintf("User %s doesn't exists.", s.c_str()));
-    // } else {
-    //   this->curr.id = id;
-    //   SocialNetworkWindow::showprofile(id);
-    //   ui->main_view->setCurrentIndex(1);
-    // }
-};
-
 void SocialNetworkWindow::showprofile(int newuser) {
-  // User *u = network.getUser(newuser);
+  if (ui->viewstack->currentIndex() == 0) {
+    // if we are comming here from a new the login page we need to update this
+    ui->viewstack->setCurrentIndex(1);
+  }
 
-  // this->user.select(u, this->curr.id);
+  User *u = network.getUser(newuser);
+
+  this->user.select(u, this->curr.id);
 
   // if (newuser == this->curr.id) {
   //   // this user
@@ -136,6 +201,9 @@ void SocialNetworkWindow::gohome() {
 }
 
 void SocialNetworkWindow::gofriend(int row, int col) {
+  (void)row;
+  (void)col;
+
   // assert(col == 0);
 
   // User *u = this->network.getUser(this->user.id);
@@ -157,6 +225,8 @@ void SocialNetworkWindow::gofriend(int row, int col) {
 }
 
 void SocialNetworkWindow::addsuggestedfriend(int row, int col) {
+  (void)row;
+  (void)col;
   // User *u = this->network.getUser(this->user.id);
   // thrownull(u);
 

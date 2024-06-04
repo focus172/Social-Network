@@ -9,6 +9,8 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 
+#include "network.h"
+
 QT_BEGIN_NAMESPACE
 /* ******************* */
 
@@ -18,7 +20,7 @@ public:
 
   QLabel *login_label;
   QLineEdit *login_input;
-  QPushButton *login_button;
+  QPushButton *button;
   QLabel *login_error;
 
   QSpacerItem *spacer_left;
@@ -39,13 +41,17 @@ class LoginPage : public QWidget {
   Q_OBJECT
 
 public:
-  LoginPage(QWidget *parent = nullptr);
+  LoginPage(QWidget *parent, Network *const network);
   ~LoginPage();
 
   void login();
 
+signals:
+  void loggedin(int id);
+
 private:
   LoginPageUi *ui;
+  Network *const network;
 };
 
 #endif // LOGINWINDOW_H_

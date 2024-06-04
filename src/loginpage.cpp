@@ -17,9 +17,9 @@ LoginPageUi::LoginPageUi(QWidget *loginpage) {
   login_input = new QLineEdit(loginpage);
   centergrid->addWidget(login_input, 2, 1, 1, 1);
 
-  login_button = new QPushButton(loginpage);
-  login_button->setEnabled(true);
-  centergrid->addWidget(login_button, 3, 1, 1, 1);
+  button = new QPushButton(loginpage);
+  button->setEnabled(true);
+  centergrid->addWidget(button, 3, 1, 1, 1);
 
   login_error = new QLabel(loginpage);
   login_error->setObjectName("login_error");
@@ -49,7 +49,7 @@ void LoginPageUi::reset() {
   login_label->setText(QCoreApplication::translate("SocialNetworkWindow",
                                                    "Enter Username", nullptr));
   login_input->setText(QString());
-  login_button->setText(
+  button->setText(
       QCoreApplication::translate("SocialNetworkWindow", "Login", nullptr));
   login_error->setText(QCoreApplication::translate(
       "SocialNetworkWindow", "User {name} doesn't exists.", nullptr));
@@ -57,10 +57,25 @@ void LoginPageUi::reset() {
 
 QT_END_NAMESPACE
 
-LoginPage::LoginPage(QWidget *parent) : QWidget(parent) {
-  ui = new LoginPageUi(this);
+LoginPage::LoginPage(QWidget *parent, Network *const n)
+    : QWidget(parent), ui(new LoginPageUi(this)), network(n) {
+
+  ui->login_error->hide();
+
+  QObject::connect(ui->button, &QPushButton::clicked, this, &LoginPage::login);
 }
 
 LoginPage::~LoginPage() { delete ui; }
 
-void LoginPage::login() {}
+void LoginPage::login() {
+  auto t = this->ui->login_input->text();
+  std::string s = t.toStdString();
+
+  int id = network->getId(s);
+  if (id < 0) {
+    this->ui->login_error->show();
+    this->ui->login_error->setText(QString::asprintf("No user: %s", s.c_str()));
+  } else {
+    emit loggedin(id);
+  }
+}
