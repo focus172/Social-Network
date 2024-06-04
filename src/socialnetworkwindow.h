@@ -32,6 +32,12 @@ public:
   QStringListModel *model;
 };
 
+struct WindowOptions {
+public:
+  char *posts;
+  char *users;
+};
+
 struct CurrentUser {
 public:
   /// id of the logged in user
@@ -42,7 +48,7 @@ class SocialNetworkWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  SocialNetworkWindow(QWidget *parent = nullptr);
+  SocialNetworkWindow(); // WindowOptions options);
   ~SocialNetworkWindow();
 
   void login();

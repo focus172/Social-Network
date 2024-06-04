@@ -4,8 +4,8 @@
 #include "util.h"
 #include <cstdlib>
 
-SocialNetworkWindow::SocialNetworkWindow(QWidget *parent)
-    : QMainWindow(parent), id(-1), user(), curr() {
+SocialNetworkWindow::SocialNetworkWindow() // WindowOptions _options)
+    : QMainWindow(nullptr), user(), curr() {
 
   int ret = network.readUsers("users.txt");
   if (ret < 0)
@@ -23,7 +23,7 @@ SocialNetworkWindow::SocialNetworkWindow(QWidget *parent)
   ui->profile_add->hide();
 
   auto p = new Post();
-  auto post = new postwidget(p, &id, ui->loginpage);
+  auto post = new postwidget(p, &this->curr.id, ui->loginpage);
   ui->gridLayout_2->addWidget(post);
 
   // auto func = []() {};
@@ -54,7 +54,7 @@ void SocialNetworkWindow::login() {
     this->ui->login_error->setText(
         QString::asprintf("User %s doesn't exists.", s.c_str()));
   } else {
-    this->id = id;
+    this->curr.id = id;
     SocialNetworkWindow::showprofile(id);
     ui->main_view->setCurrentIndex(1);
   }
@@ -63,9 +63,9 @@ void SocialNetworkWindow::login() {
 void SocialNetworkWindow::showprofile(int newuser) {
   User *u = network.getUser(newuser);
 
-  this->user.select(u, this->id);
+  this->user.select(u, this->curr.id);
 
-  if (newuser == this->id) {
+  if (newuser == this->curr.id) {
     // this user
     ui->profile_label->setText(QString("My Profile"));
     ui->profile_home->hide();
@@ -95,7 +95,7 @@ void SocialNetworkWindow::showprofile(int newuser) {
     ui->profile_suggested_lable->hide();
     ui->profile_suggested_table->hide();
 
-    auto me = this->network.getUser(this->id);
+    auto me = this->network.getUser(this->curr.id);
     auto myfr = me->getFriends();
     if (myfr.find(newuser) == myfr.end()) {
       ui->profile_add->show();
@@ -124,7 +124,7 @@ void SocialNetworkWindow::showprofile(int newuser) {
 }
 
 void SocialNetworkWindow::gohome() {
-  SocialNetworkWindow::showprofile(this->id);
+  SocialNetworkWindow::showprofile(this->curr.id);
 }
 
 void SocialNetworkWindow::gofriend(int row, int col) {
@@ -169,13 +169,13 @@ void SocialNetworkWindow::addsuggestedfriend(int row, int col) {
 }
 
 void SocialNetworkWindow::addfriend() {
-  User *u = this->network.getUser(this->id);
+  User *u = this->network.getUser(this->curr.id);
   thrownull(u);
   User *f = this->network.getUser(this->user.id);
   thrownull(f);
 
   u->addFriend(this->user.id);
-  f->addFriend(this->id);
+  f->addFriend(this->curr.id);
 
   this->network.writeUsers("users.txt");
 
