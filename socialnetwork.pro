@@ -14,7 +14,6 @@ SOURCES += \
     src/network/post.cpp \
     src/network/user.cpp \
     src/pages/makepostpage.cpp \
-    src/widgets/postwidget.cpp \
     src/pages/loginpage.cpp \
     src/pages/profilepage.cpp \
     src/socialnetworkwindow.cpp
@@ -24,10 +23,12 @@ HEADERS += \
     src/network/post.h \
     src/network/user.h \
     src/pages/makepostpage.h \
-    src/widgets/postwidget.h \
     src/pages/loginpage.h \
     src/pages/profilepage.h \
     src/socialnetworkwindow.h
+
+# src/widgets/postwidget.h
+# src/widgets/postwidget.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

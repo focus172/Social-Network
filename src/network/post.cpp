@@ -1,75 +1,88 @@
 #include "post.h"
-#include <sstream>
-#include <string>
 
-Post::Post() {
-  // this is not how i would do this but whatever
-  this->likes = {};
-  this->message_ = "";
-  this->messageId_ = 0;
-  this->ownerId_ = 0;
-}
-
-Post::Post(int messageId, int ownerId, std::string message,
-           std::set<int> likes) {
-  this->likes = likes;
-  this->message_ = message;
-  this->messageId_ = messageId;
-  this->ownerId_ = ownerId;
-
-  this->date = std::time(nullptr);
-
-}
-
-std::string Post::toString() {
-  std::stringstream buf;
-  buf << this->message_ << " Liked by " << likes.size() << " people.";
-  return buf.str();
-}
-
-// ## Getters
-
-int Post::getMessageId() { return this->messageId_; }
-int Post::getOwnerId() { return this->ownerId_; }
-std::string Post::getMessage() { return this->message_; }
-bool Post::is_liked(int id) {
-  return this->likes.find(id) != this->likes.end();
-}
-void Post::set_liked(int id, bool liked) {
-  if (liked)
-    this->likes.insert(id);
-  else
-    this->likes.erase(id);
-}
-
-// ## Functions to be overwritten
-
-std::string Post::getAuthor() { return ""; }
-bool Post::getIsPublic() { return true; }
-
-// ------------------ IPOST ---------------------------
-
-IncomingPost::IncomingPost() : Post::Post() {}
-
-IncomingPost::IncomingPost(int messageId, int ownerId, std::string message,
-                           std::set<int> likes, bool isPublic,
-                           std::string author)
-    : Post(messageId, ownerId, message, likes)
-
+Post::Post()
+	: messageId_(0),
+	  ownerId_(0),
+	  message_(""),
+	  likes_(0)
 {
-  this->isPublic_ = isPublic;
-  this->author_ = author;
 }
 
-std::string IncomingPost::toString() {
-  std::stringstream buf;
-  buf << this->author_ << " wrote";
-  if (!this->getIsPublic()) {
-    buf << "(private)";
-  }
-  buf << ": " << this->Post::toString();
-
-  return buf.str();
+Post::Post(int messageId, int ownerId, std::string message, int likes)
+	: messageId_(messageId),
+	  ownerId_(ownerId),
+	  message_(message),
+	  likes_(likes)
+{
 }
-std::string IncomingPost::getAuthor() { return this->author_; }
-bool IncomingPost::getIsPublic() { return this->isPublic_; }
+
+std::string Post::toString()
+{
+	return message_ + " Liked by " + std::to_string(likes_) + " people.";
+}
+
+int Post::getMessageId()
+{
+	return messageId_;
+}
+
+int Post::getOwnerId()
+{
+	return ownerId_;
+}
+
+std::string Post::getMessage()
+{
+	return message_;
+}
+
+int Post::getLikes()
+{
+	return likes_;
+}
+
+std::string Post::getAuthor()
+{
+	return "";
+}
+
+bool Post::getIsPublic()
+{
+	return true;
+}
+
+IncomingPost::IncomingPost()
+	: Post(),
+	  isPublic_(true),
+	  author_("")
+{
+}
+
+IncomingPost::IncomingPost(int messageId, int ownerId, std::string message, int likes, bool isPublic, std::string author)
+	: Post(messageId, ownerId, message, likes),
+	  isPublic_(isPublic),
+	  author_(author)
+{
+}
+
+std::string IncomingPost::toString()
+{
+	std::string final = author_ + " wrote";
+	if (!isPublic_)
+	{
+		final += "(private)";
+	}
+	final += ": " + Post::toString();
+
+	return final;
+}
+
+std::string IncomingPost::getAuthor()
+{
+	return author_;
+}
+
+bool IncomingPost::getIsPublic()
+{
+	return isPublic_;
+}
