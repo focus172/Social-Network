@@ -91,6 +91,24 @@ public:
   int writePosts(const char *fname);
 
   int write_posts_json(const char *fname);
+
+    // pre: none
+    // post: gets the post given an id of a user
+    Post *getPost(int messageId)
+    {
+        for (User *user : users_)
+        {
+            for (Post *post : user->getPosts())
+            {
+                if (post->getMessageId() == messageId)
+                {
+                    return post;
+                }
+            }
+        }
+
+        return nullptr; // return null if no post with the given messageId is found
+    }
 };
 
 #endif // !NETWORK_H
