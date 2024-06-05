@@ -42,9 +42,7 @@ public:
   QMenuBar *menubar;
   QStatusBar *statusbar;
 
-  SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow, Network *const net);
-
-  void reset(QMainWindow *SocialNetworkWindow);
+  SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow, Network *net);
 };
 
 QT_END_NAMESPACE

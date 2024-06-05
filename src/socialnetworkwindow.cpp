@@ -36,10 +36,6 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   SocialNetworkWindow->setStatusBar(statusbar);
   /* ************* End Window Setup ************ */
 
-  reset(SocialNetworkWindow);
-}
-
-void SocialNetworkWindowUi::reset(QMainWindow *SocialNetworkWindow) {
   SocialNetworkWindow->setWindowTitle(QCoreApplication::translate(
       "SocialNetworkWindow", "Social Network", nullptr));
 }

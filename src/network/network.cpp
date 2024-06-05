@@ -692,8 +692,8 @@ int Network::read_posts_json(const char *fname) {
       auto auth = this->getUser(authorid);
       std::string author = auth->getName();
 
-      // Post *p = new IncomingPost(id, recipient, message, likes, ispublic, author);
-      // u->addPost(p);
+      // Post *p = new IncomingPost(id, recipient, message, likes, ispublic,
+      // author); u->addPost(p);
 
     } else {
       User *u = this->getUser(authorid);

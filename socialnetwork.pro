@@ -27,11 +27,6 @@ HEADERS += \
     src/pages/profilepage.h \
     src/socialnetworkwindow.h
 
-# FORMS += src/socialnetworkwindow.ui
-
-# src/widgets/postwidget.h
-# src/widgets/postwidget.cpp
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

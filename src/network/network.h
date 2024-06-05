@@ -73,7 +73,7 @@ public:
   /// pre: ownerId is a valid user id
   /// post: the user has a post added to them
   // void addPost(int ownerId, std::string message, std::set<int> likes,
-               // bool isIncoming, std::string authorName, bool isPublic);
+  // bool isIncoming, std::string authorName, bool isPublic);
 
   /// pre: ownerId is a valid user id
   /// post: the posts string are returned
@@ -92,23 +92,19 @@ public:
 
   int write_posts_json(const char *fname);
 
-    // pre: none
-    // post: gets the post given an id of a user
-    Post *getPost(int messageId)
-    {
-        for (User *user : users_)
-        {
-            for (Post *post : user->getPosts())
-            {
-                if (post->getMessageId() == messageId)
-                {
-                    return post;
-                }
-            }
+  // pre: none
+  // post: gets the post given an id of a user
+  Post *getPost(int messageId) {
+    for (User *user : users_) {
+      for (Post *post : user->getPosts()) {
+        if (post->getMessageId() == messageId) {
+          return post;
         }
-
-        return nullptr; // return null if no post with the given messageId is found
+      }
     }
+
+    return nullptr; // return null if no post with the given messageId is found
+  }
 };
 
 #endif // !NETWORK_H
