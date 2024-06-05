@@ -1,390 +1,255 @@
 #include "socialnetworkwindow.h"
-#include "ui_socialnetworkwindow.h"
 
-SocialNetworkWindow::SocialNetworkWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::SocialNetworkWindow)
-{
-    ui->setupUi(this);
+/* ******************************************* */
+QT_BEGIN_NAMESPACE
 
-    // initially hide everything that isn't login page
-    ui->invalidName->setVisible(false);
-    ui->personProfile->setVisible(false);
-    ui->recentPosts->setVisible(false);
-    ui->returnHome->setVisible(false);
-    ui->userFriends->setVisible(false);
-    ui->friendSuggestions->setVisible(false);
-    ui->friendSuggestionsLabel->setVisible(false);
-    ui->addFriend->setVisible(false);
+SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
+                                             Network *const net) {
+  SocialNetworkWindow->resize(800, 600);
+  centralwidget = new QWidget(SocialNetworkWindow);
 
-    // read in users and posts
-    // n.readUsers("C:\\Qt\\workspace\\Class\\HW4\\users.txt");
-    // n.readPosts("C:\\Qt\\workspace\\Class\\HW4\\posts.txt");
-    n.readUsers("etc/users.txt");
-    n.readPosts("etc/posts.txt");
+  /* ***************** Page Setup *************** */
+  // grid is used so that items appear in center of screen
+  grid = new QGridLayout(centralwidget);
+  viewstack = new QStackedWidget(centralwidget);
 
-    // connect everything
-    connect(ui->loginButton, &QPushButton::clicked, this, &SocialNetworkWindow::login);
-    connect(ui->returnHome, &QPushButton::clicked, this, &SocialNetworkWindow::goToHome);
-    connect(ui->userFriends, &QTableWidget::cellClicked, this, &SocialNetworkWindow::goToFriend);
-    connect(ui->friendSuggestions, &QTableWidget::cellClicked, this, &SocialNetworkWindow::goToFriendSuggestion);
-    connect(ui->addFriend, &QPushButton::clicked, this, &SocialNetworkWindow::addAsFriend);
+  loginpage = new LoginPage(centralwidget, net);
+  viewstack->addWidget(loginpage);
+
+  profilepage = new ProfilePage(centralwidget);
+  viewstack->addWidget(profilepage);
+
+  makepostpage = new MakepostPage(centralwidget);
+  viewstack->addWidget(makepostpage);
+
+  grid->addWidget(viewstack, 0, 0);
+  SocialNetworkWindow->setCentralWidget(centralwidget);
+  /* ************** End Page Setup *************** */
+
+  /* *************** Window Setup ************* */
+  menubar = new QMenuBar(SocialNetworkWindow);
+  menubar->setObjectName("menubar");
+  menubar->setGeometry(QRect(0, 0, 800, 19));
+  SocialNetworkWindow->setMenuBar(menubar);
+  statusbar = new QStatusBar(SocialNetworkWindow);
+  statusbar->setObjectName("statusbar");
+  SocialNetworkWindow->setStatusBar(statusbar);
+  /* ************* End Window Setup ************ */
+
+  reset(SocialNetworkWindow);
 }
 
-void SocialNetworkWindow::login()
-{
-    QString qname = ui->loginTextBox->toPlainText();
-    std::string name = qname.toStdString();
-
-    // if name is not already in here, it is invalid
-    int id = n.getId(name);
-    if (id == -1)
-    {
-        ui->invalidName->setVisible(true);
-        return;
-    }
-    else
-    {
-        // hide everything on the login page
-        ui->enterNameLabel->setVisible(false);
-        ui->loginTextBox->setVisible(false);
-        ui->loginButton->setVisible(false);
-        ui->invalidName->setVisible(false);
-
-        // show everything in profile page
-        ui->personProfile->setVisible(true);
-        ui->recentPosts->setVisible(true);
-        ui->userFriends->setVisible(true);
-        ui->friendSuggestions->setVisible(true);
-        ui->friendSuggestionsLabel->setVisible(true);
-
-        // initialize the most recent and initial users
-        User *u = n.getUser(id);
-        initialUser = u;
-        mostRecentUser = u;
-
-        // make table full of user friends
-        std::set<int> uFriends = u->getFriends();
-        int numberFriends = uFriends.size();
-        ui->userFriends->setRowCount(numberFriends);
-        ui->userFriends->setColumnCount(1);
-
-        int i = 0;
-        for (auto itr = uFriends.begin(); itr != uFriends.end(); ++itr)
-        {
-            int tempFriendID = *itr;
-            User *tempFriend = n.getUser(tempFriendID);
-            std::string name = tempFriend->getName();
-            QString qname = QString::fromStdString(name);
-            QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
-            ui->userFriends->setItem(i, 0, displayedName);
-
-            ++i;
-        }
-
-        // make table for friend suggestions
-        int score = 0;
-        std::vector<int> friendSuggestions = n.suggestFriends(id, score);
-        int friendSuggestionsSize = friendSuggestions.size();
-        ui->friendSuggestions->setRowCount(friendSuggestionsSize);
-        ui->friendSuggestions->setColumnCount(1);
-
-        for (int i = 0; i < friendSuggestionsSize; ++i)
-        {
-            int friendSuggestionId = friendSuggestions[i];
-            User *friendSuggestion = n.getUser(friendSuggestionId);
-            std::string name = friendSuggestion->getName();
-            QString qname = QString::fromStdString(name);
-            QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
-            ui->friendSuggestions->setItem(i, 0, displayedName);
-        }
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // make posts too(FOR TABLE)
-        int totalPosts = 0;
-        std::set<int> friends = u->getFriends();
-        for (int friendId : friends)
-        {
-            User *friendUser = n.getUser(friendId);
-            totalPosts += friendUser->getPosts().size();
-        }
-
-        // Set the row count to the total number of posts
-        ui->postsTable->setRowCount(totalPosts);
-
-        ui->postsTable->setColumnCount(4);
-
-        // Set the width of the columns
-        ui->postsTable->setColumnWidth(0, 200); // adjust as needed
-        ui->postsTable->setColumnWidth(1, 700); // adjust as needed
-        ui->postsTable->setColumnWidth(2, 100); // adjust as needed
-        ui->postsTable->setColumnWidth(3, 100); // adjust as needed
-
-        // Initialize a counter for the current row
-        int currentRow = 0;
-
-        // Iterate over all friends
-        for (int friendId : friends)
-        {
-            User *friendUser = n.getUser(friendId);
-
-            // Get all posts from the current friend
-            std::vector<Post *> posts = friendUser->getPosts();
-
-            // Get all posts as a string
-            std::string postsString = friendUser->getPostsString(posts.size(), false);
-
-            // Split the posts string into individual posts
-            QStringList individualPosts = QString::fromStdString(postsString).split("\n\n");
-
-            // Iterate over the individualPosts list and insert each post's text into the table
-            for (int i = 0; i < individualPosts.size(); ++i)
-            {
-                const QString &post = individualPosts[i];
-                Post *postObj = posts[individualPosts.size() - i - 1]; // since individualPosts is constructed backwards
-
-                // Create a new QTableWidgetItem with the friend's name
-                QTableWidgetItem *nameItem = new QTableWidgetItem(QString::fromStdString(friendUser->getName()));
-
-                // Insert the name item into the table at row currentRow, column 0
-                ui->postsTable->setItem(currentRow, 0, nameItem);
-
-                // Create a new QTableWidgetItem with the post's text
-                QTableWidgetItem *postItem = new QTableWidgetItem(post);
-
-                // Insert the post item into the table at row currentRow, column 1
-                ui->postsTable->setItem(currentRow, 1, postItem);
-
-                // Create a new QPushButton with the text "Like Post"
-                QPushButton *button = new QPushButton("Like Post");
-
-                // Connect the button's clicked signal to the likePost slot function
-                connect(button, &QPushButton::clicked, this, [this, currentRow, userId = u->getId()]()
-                        {
-                    // Get the messageId from the table
-                    int messageId = ui->postsTable->item(currentRow, 3)->text().toInt();
-
-                    // Call the likePost function with the messageId and userId
-                    likePost(currentRow, messageId, userId); });
-
-                // Insert the button into the table at row currentRow, column 2
-                ui->postsTable->setCellWidget(currentRow, 2, button);
-
-                // Create a new QTableWidgetItem with the post's messageId
-                QTableWidgetItem *messageIdItem = new QTableWidgetItem(QString::number(postObj->getMessageId()));
-
-                // Insert the messageId item into the table at row currentRow, column 3
-                ui->postsTable->setItem(currentRow, 3, messageIdItem);
-
-                // Increment the current row counter
-                ++currentRow;
-            }
-        }
-
-        // FOR TEXT BOX, NOT TABLE
-        // std::vector<Post*> posts = u->getPosts();
-        // int numPosts = posts.size();
-        // numPosts = std::min(numPosts, 5);
-        // std::string allPosts = u->getPostsString(numPosts, false);
-        // QString qAllPosts = QString::fromStdString(allPosts);
-        // ui->recentPosts->setText(qAllPosts);
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
+void SocialNetworkWindowUi::reset(QMainWindow *SocialNetworkWindow) {
+  SocialNetworkWindow->setWindowTitle(QCoreApplication::translate(
+      "SocialNetworkWindow", "Social Network", nullptr));
 }
 
-void SocialNetworkWindow::goToHome()
-{
-    // change the mostRecentId to initial user
-    mostRecentUser = initialUser;
+QT_END_NAMESPACE
+/* ******************************************* */
 
-    // read in users, it might have changed
-    n.readUsers("C:\\Qt\\workspace\\Class\\HW4\\users.txt");
+SocialNetworkWindow::SocialNetworkWindow()
+    : QMainWindow(nullptr), curr(), user() {
 
-    // have to show and hide stuff
-    ui->returnHome->setVisible(false);
-    ui->friendSuggestions->setVisible(true);
-    ui->friendSuggestionsLabel->setVisible(true);
-    ui->addFriend->setVisible(false);
+  int ret = network.readUsers("users.txt");
+  if (ret < 0) {
+    // try backup location
+    ret = network.readUsers("etc/users.txt");
+    if (ret < 0)
+      throw;
+  }
 
-    // change name
-    ui->personProfile->setText("My Profile");
+  ret = network.readPosts("posts.txt");
+  if (ret < 0) {
+    // try backup location
+    ret = network.readPosts("etc/posts.txt");
+    if (ret < 0)
+      throw;
+  }
 
-    // change friend list
-    std::set<int> uFriends = initialUser->getFriends();
-    int numberFriends = uFriends.size();
-    ui->userFriends->setRowCount(numberFriends);
-    ui->userFriends->setColumnCount(1);
+  ui = new SocialNetworkWindowUi(this, &network);
 
-    int i = 0;
-    for (auto itr = uFriends.begin(); itr != uFriends.end(); ++itr)
-    {
-        int tempFriendID = *itr;
-        User *tempFriend = n.getUser(tempFriendID);
-        std::string name = tempFriend->getName();
-        QString qname = QString::fromStdString(name);
-        QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
-        ui->userFriends->setItem(i, 0, displayedName);
+  // ui->profile_friends_table->setColumnCount(1);
 
-        ++i;
-    }
+  // ui->profile_home->hide();
+  // ui->profile_add->hide();
 
-    // // change posts
-    // std::vector<Post *> posts = initialUser->getPosts();
-    // int numPosts = posts.size();
-    // numPosts = std::min(numPosts, 5);
-    // std::string allPosts = initialUser->getPostsString(numPosts, false);
-    // QString qAllPosts = QString::fromStdString(allPosts);
-    // ui->recentPosts->setText(qAllPosts);
+  // auto p = new Post();
+  // auto post = new postwidget(p, &this->curr.id, ui->loginpage);
+  // ui->gridLayout_2->addWidget(post);
+
+  // login ports
+  QObject::connect(ui->loginpage, &LoginPage::loggedin, this,
+                   &SocialNetworkWindow::showprofile);
+
+  // profile ports
+  QObject::connect(ui->profilepage, &ProfilePage::goto_makepost, this,
+                   &SocialNetworkWindow::show_makepost);
+
+  // make post connection
+  QObject::connect(ui->makepostpage, &MakepostPage::submit_post, this,
+                   &SocialNetworkWindow::add_post);
+
+  // QObject::connect(ui->profile_home, &QPushButton::clicked, this,
+  //                  &SocialNetworkWindow::gohome);
+  // QObject::connect(ui->profile_add, &QPushButton::clicked, this,
+  //                  &SocialNetworkWindow::addfriend);
+  // QObject::connect(ui->profile_friends_table, &QTableWidget::cellClicked,
+  // this,
+  //                  &SocialNetworkWindow::gofriend);
+  // QObject::connect(ui->profile_suggested_table, &QTableWidget::cellClicked,
+  //                  this, &SocialNetworkWindow::addsuggestedfriend);
 }
 
-void SocialNetworkWindow::goToFriend(int row, int column)
-{
-    // hide table of friend suggestions and show home button
-    ui->friendSuggestions->setVisible(false);
-    ui->friendSuggestionsLabel->setVisible(false);
-    ui->returnHome->setVisible(true);
 
-    // get name of clicked person, set profile name to that
-    QTableWidgetItem *item = ui->userFriends->item(row, column);
-    QString qItemName = item->text();
-    ui->personProfile->setText(qItemName + "'s profile");
+SocialNetworkWindow::~SocialNetworkWindow() { delete ui; }
 
-    // change the name of the add friend label
-    ui->addFriend->setText("Add " + qItemName + " as a friend");
-    ui->addFriend->setVisible(true);
-
-    // change most recent user to the friend
-    std::string friendName = qItemName.toStdString();
-    int uFriendId = n.getId(friendName);
-    User *uFriend = n.getUser(uFriendId);
-    mostRecentUser = uFriend;
-
-    // change the friend list to friends of the friend, and add the friend to the stack
-    std::set<int> uFriendsFriends = uFriend->getFriends();
-    int numberFriends = uFriendsFriends.size();
-    ui->userFriends->setRowCount(numberFriends);
-    ui->userFriends->setColumnCount(1);
-
-    int i = 0;
-    for (auto itr = uFriendsFriends.begin(); itr != uFriendsFriends.end(); ++itr)
-    {
-        int tempFriendID = *itr;
-        User *tempFriend = n.getUser(tempFriendID);
-        std::string name = tempFriend->getName();
-        QString qname = QString::fromStdString(name);
-        QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
-        ui->userFriends->setItem(i, 0, displayedName);
-
-        ++i;
-    }
-
-    // // make posts too, set visibility of incoming posts to private
-    // std::vector<Post *> posts = uFriend->getPosts();
-    // int numPosts = posts.size();
-    // numPosts = std::min(numPosts, 5);
-    // std::string allPosts = uFriend->getPostsString(numPosts, true);
-    // QString qAllPosts = QString::fromStdString(allPosts);
-    // ui->recentPosts->setText(qAllPosts);
+void SocialNetworkWindow::show_makepost() {
+  this->ui->makepostpage->load_page(this->curr.id);
+  this->ui->viewstack->setCurrentIndex(2);
 }
 
-void SocialNetworkWindow::goToFriendSuggestion(int row, int column)
-{
-    // hide table of friend suggestions and show home button
-    ui->friendSuggestions->setVisible(false);
-    ui->friendSuggestionsLabel->setVisible(false);
-    ui->returnHome->setVisible(true);
+void SocialNetworkWindow::add_post(Post *p) {
+  User *u = this->network.getUser(p->getOwnerId());
+  if (u == nullptr) {
+    printf("post is not asociated with any user\n");
+    this->ui->viewstack->setCurrentIndex(1);
+    return;
+  }
 
-    // get name of clicked person, set profile name to that
-    QTableWidgetItem *item = ui->friendSuggestions->item(row, column);
-    QString qItemName = item->text();
-    ui->personProfile->setText(qItemName + "'s profile");
-
-    // change the name of the add friend label
-    ui->addFriend->setText("Add " + qItemName + " as a friend");
-    ui->addFriend->setVisible(true);
-
-    // change most recent user to the friend
-    std::string friendName = qItemName.toStdString();
-    int uFriendId = n.getId(friendName);
-    User *uFriend = n.getUser(uFriendId);
-    mostRecentUser = uFriend;
-
-    // change the friend list to friends of the friend, and add the friend to the stack
-    std::set<int> uFriendsFriends = uFriend->getFriends();
-    int numberFriends = uFriendsFriends.size();
-    ui->userFriends->setRowCount(numberFriends);
-    ui->userFriends->setColumnCount(1);
-
-    int i = 0;
-    for (auto itr = uFriendsFriends.begin(); itr != uFriendsFriends.end(); ++itr)
-    {
-        int tempFriendID = *itr;
-        User *tempFriend = n.getUser(tempFriendID);
-        std::string name = tempFriend->getName();
-        QString qname = QString::fromStdString(name);
-        QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
-        ui->userFriends->setItem(i, 0, displayedName);
-
-        ++i;
-    }
-
-    // // make posts too, set visibility of incoming posts to private
-    // std::vector<Post *> posts = uFriend->getPosts();
-    // int numPosts = posts.size();
-    // numPosts = std::min(numPosts, 5);
-    // std::string allPosts = uFriend->getPostsString(numPosts, true);
-    // QString qAllPosts = QString::fromStdString(allPosts);
-    // ui->recentPosts->setText(qAllPosts);
+  printf("TODO: fix post not being added by uncommenting next line\n");
+  // u->addPost(p);
+  this->ui->viewstack->setCurrentIndex(1);
 }
 
-void SocialNetworkWindow::addAsFriend()
-{
-    // get names of original user and the clicked on user
-    std::string originalUName = initialUser->getName();
-    std::string recentUName = mostRecentUser->getName();
+void SocialNetworkWindow::showprofile(int newuser) {
+  if (ui->viewstack->currentIndex() == 0) {
+    // if we are comming here from a new the login page we need to update this
+    ui->viewstack->setCurrentIndex(1);
+  }
 
-    // add connection
-    n.addConnection(originalUName, recentUName);
+  User *u = network.getUser(newuser);
 
-    // change the txt file of user and post
-    n.writeUsers("C:\\Qt\\workspace\\Class\\HW4\\users.txt");
-    n.writePosts("C:\\Qt\\workspace\\Class\\HW4\\posts.txt");
+  this->user.select(u, this->curr.id);
 
-    // remake friend suggestions based on this new connection
-    int score = 0;
-    std::vector<int> friendSuggestions = n.suggestFriends(initialUser->getId(), score);
-    int friendSuggestionsSize = friendSuggestions.size();
-    ui->friendSuggestions->setRowCount(friendSuggestionsSize);
-    ui->friendSuggestions->setColumnCount(1);
+  // if (newuser == this->curr.id) {
+  //   // this user
+  //   ui->profile_label->setText(QString("My Profile"));
+  //   ui->profile_home->hide();
 
-    for (int i = 0; i < friendSuggestionsSize; ++i)
-    {
-        int friendSuggestionId = friendSuggestions[i];
-        User *friendSuggestion = n.getUser(friendSuggestionId);
-        std::string name = friendSuggestion->getName();
-        QString qname = QString::fromStdString(name);
-        QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
-        ui->friendSuggestions->setItem(i, 0, displayedName);
-    }
+  //   ui->profile_add->hide();
+
+  //   ui->profile_suggested_lable->show();
+  //   ui->profile_suggested_table->show();
+  //   int score;
+  //   auto suggestions = this->network.suggestFriends(newuser, score);
+  //   ui->profile_suggested_table->setRowCount(suggestions.size());
+
+  //   int index = 0;
+  //   for (auto f : suggestions) {
+  //     User *uf = this->network.getUser(f);
+  //     auto it = new QTableWidgetItem(QString::fromStdString(uf->getName()));
+  //     ui->profile_suggested_table->setItem(index, 0, it);
+  //     index += 1;
+  //   }
+
+  // } else {
+  //   // other user
+  //   ui->profile_label->setText(
+  //       QString::asprintf("%s's Profile", u->getName().c_str()));
+  //   ui->profile_home->show();
+
+  //   ui->profile_suggested_lable->hide();
+  //   ui->profile_suggested_table->hide();
+
+  //   auto me = this->network.getUser(this->curr.id);
+  //   auto myfr = me->getFriends();
+  //   if (myfr.find(newuser) == myfr.end()) {
+  //     ui->profile_add->show();
+  //   } else {
+  //     ui->profile_add->hide();
+  //   }
+  // }
+
+  // ui->profile_friends_table->clear();
+
+  // auto fr = u->getFriends();
+  // ui->profile_friends_table->setRowCount(fr.size());
+
+  // int index = 0;
+  // for (auto f : fr) {
+  //   // printf("thing %d\n", index);
+  //   User *uf = this->network.getUser(f);
+
+  //   // this call takes owevership of the object
+  //   auto it = new QTableWidgetItem(QString::fromStdString(uf->getName()));
+  //   ui->profile_friends_table->setItem(index, 0, it);
+  //   index += 1;
+  // }
+
+  // ui->profile_post_list->setModel(user.model);
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-void SocialNetworkWindow::likePost(int row, int messageId, int userId)
-{
-    Post *post = n.getPost(messageId);
-
-    // Increase the number of likes for the post
-    post->like(userId);
-
-    // Update the table to reflect the new number of likes
-    ui->postsTable->item(row, 1)->setText(QString::fromStdString(post->toString()));
-
-    // Also update posts.txt
-    n.writePosts("C:\\Qt\\workspace\\Class\\HW4\\posts.txt");
+void SocialNetworkWindow::gohome() {
+  // SocialNetworkWindow::showprofile(this->curr.id);
 }
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-SocialNetworkWindow::~SocialNetworkWindow()
-{
-    delete ui;
+void SocialNetworkWindow::gofriend(int row, int col) {
+  (void)row;
+  (void)col;
+
+  // assert(col == 0);
+
+  // User *u = this->network.getUser(this->user.id);
+  // auto fr = u->getFriends();
+
+  // int show = -1;
+  // int index = 0;
+  // for (int f : fr) {
+  //   if (index == row) {
+  //     show = f;
+  //     break;
+  //   }
+  //   index += 1;
+  // }
+  // if (show < 0)
+  //   return;
+
+  // SocialNetworkWindow::showprofile(show);
+}
+
+void SocialNetworkWindow::addsuggestedfriend(int row, int col) {
+  (void)row;
+  (void)col;
+  // User *u = this->network.getUser(this->user.id);
+  // thrownull(u);
+
+  // auto it = ui->profile_suggested_table->item(row, col);
+  // auto text = it->text();
+  // int s = this->network.getId(text.toStdString());
+
+  // User *f = this->network.getUser(s);
+  // thrownull(u);
+
+  // u->addFriend(s);
+  // f->addFriend(u->getId());
+
+  // this->network.writeUsers("users.txt");
+
+  // SocialNetworkWindow::showprofile(this->user.id);
+}
+
+void SocialNetworkWindow::addfriend() {
+  // User *u = this->network.getUser(this->curr.id);
+  // thrownull(u);
+  // User *f = this->network.getUser(this->user.id);
+  // thrownull(f);
+
+  // u->addFriend(this->user.id);
+  // f->addFriend(this->curr.id);
+
+  // this->network.writeUsers("users.txt");
+
+  // this->ui->profile_add->hide();
+
+  // SocialNetworkWindow::showprofile(this->user.id);
 }

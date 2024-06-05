@@ -27,7 +27,7 @@ HEADERS += \
     src/pages/profilepage.h \
     src/socialnetworkwindow.h
 
-FORMS += src/socialnetworkwindow.ui
+# FORMS += src/socialnetworkwindow.ui
 
 # src/widgets/postwidget.h
 # src/widgets/postwidget.cpp
