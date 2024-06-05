@@ -24,10 +24,6 @@ class ProfilePageUi
 {
 public:
     QWidget *centralwidget;
-    QPushButton *loginButton;
-    QLabel *enterNameLabel;
-    QTextEdit *loginTextBox;
-    QLabel *invalidName;
     QLabel *personProfile;
     QTableWidget *userFriends;
     QLabel *recentPosts;
@@ -41,23 +37,11 @@ public:
 
     void setupUi(QWidget *ProfilePage)
     {
-        if (ProfilePage->objectName().isEmpty())
-            ProfilePage->setObjectName("ProfilePage");
-        ProfilePage->resize(800, 600);
+        // ProfilePage->setObjectName("ProfilePage");
+        // ProfilePage->resize(800, 600);
         centralwidget = new QWidget(ProfilePage);
         centralwidget->setObjectName("centralwidget");
-        loginButton = new QPushButton(centralwidget);
-        loginButton->setObjectName("loginButton");
-        loginButton->setGeometry(QRect(30, 110, 80, 31));
-        enterNameLabel = new QLabel(centralwidget);
-        enterNameLabel->setObjectName("enterNameLabel");
-        enterNameLabel->setGeometry(QRect(30, 50, 91, 16));
-        loginTextBox = new QTextEdit(centralwidget);
-        loginTextBox->setObjectName("loginTextBox");
-        loginTextBox->setGeometry(QRect(30, 70, 151, 31));
-        invalidName = new QLabel(centralwidget);
-        invalidName->setObjectName("invalidName");
-        invalidName->setGeometry(QRect(30, 160, 181, 21));
+
         personProfile = new QLabel(centralwidget);
         personProfile->setObjectName("personProfile");
         personProfile->setGeometry(QRect(190, 60, 191, 16));
@@ -89,23 +73,19 @@ public:
         postsTable->setObjectName("postsTable");
         postsTable->setGeometry(QRect(10, 260, 721, 261));
 
-        retranslateUi(ProfilePage);
+        reset();
 
         // QMetaObject::connectSlotsByName(ProfilePage);
     } // setupUi
 
-    void retranslateUi(QWidget *ProfilePage)
+    void reset()
     {
-        // ProfilePage->setWindowTitle(QCoreApplication::translate("ProfilePage", "ProfilePage", nullptr));
-        loginButton->setText(QCoreApplication::translate("ProfilePage", "Login", nullptr));
-        enterNameLabel->setText(QCoreApplication::translate("ProfilePage", "Enter your name", nullptr));
-        invalidName->setText(QCoreApplication::translate("ProfilePage", "Invalid name, please try again", nullptr));
         personProfile->setText(QCoreApplication::translate("ProfilePage", "My Profile", nullptr));
         recentPosts->setText(QCoreApplication::translate("ProfilePage", "Posts:", nullptr));
         returnHome->setText(QCoreApplication::translate("ProfilePage", "Return to home", nullptr));
         friendSuggestionsLabel->setText(QCoreApplication::translate("ProfilePage", "Friend Suggestions", nullptr));
         addFriend->setText(QCoreApplication::translate("ProfilePage", "Add __ as friend", nullptr));
-    } // retranslateUi
+    }
 
 };
 
@@ -120,7 +100,7 @@ public:
 
     // pre: none
     // post: creates the window for the ui
-    ProfilePage(QWidget *parent = nullptr);
+    ProfilePage(Network *network, QWidget *parent = nullptr);
 
     // pre: none
     // post: deletes the window
@@ -128,9 +108,9 @@ public:
 
     // MOTIFICATION MEMBER FUNCTIONS
 
-    // pre: none
-    // post: displays login page, and displays home page when valid name is entered
-    void login();
+    /// Function called when a user logs in. This display is not active before
+    /// this function is called.
+    void login(User *u);
 
     // pre: none
     // post: goes to home profile page
@@ -157,7 +137,7 @@ signals:
 
 private:
     ProfilePageUi *ui;
-    Network n;
+    Network *n;
     User *initialUser;
     User *mostRecentUser;
 };

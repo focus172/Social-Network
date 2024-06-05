@@ -4,7 +4,7 @@
 QT_BEGIN_NAMESPACE
 
 SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
-                                             Network *const net) {
+                                             Network *net) {
   SocialNetworkWindow->resize(800, 600);
   centralwidget = new QWidget(SocialNetworkWindow);
 
@@ -16,7 +16,7 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   loginpage = new LoginPage(centralwidget, net);
   viewstack->addWidget(loginpage);
 
-  profilepage = new ProfilePage(centralwidget);
+  profilepage = new ProfilePage(net, centralwidget);
   viewstack->addWidget(profilepage);
 
   makepostpage = new MakepostPage(centralwidget);
@@ -122,12 +122,13 @@ void SocialNetworkWindow::add_post(Post *p) {
 }
 
 void SocialNetworkWindow::showprofile(int newuser) {
+  User *u = network.getUser(newuser);
+
   if (ui->viewstack->currentIndex() == 0) {
     // if we are comming here from a new the login page we need to update this
     ui->viewstack->setCurrentIndex(1);
+    ui->profilepage->login(u);
   }
-
-  User *u = network.getUser(newuser);
 
   this->user.select(u, this->curr.id);
 
