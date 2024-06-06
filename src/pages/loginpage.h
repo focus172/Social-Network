@@ -41,7 +41,7 @@ class LoginPage : public QWidget {
   Q_OBJECT
 
 public:
-  LoginPage(QWidget *parent, Network *const network);
+  LoginPage(Network *const network, QWidget *parent = nullptr);
   ~LoginPage();
 
   void login();

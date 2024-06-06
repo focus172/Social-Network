@@ -5,6 +5,7 @@
 #include <QTableWidget>
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
@@ -22,7 +23,7 @@ QT_BEGIN_NAMESPACE
 
 class ProfilePageUi {
 public:
-  QWidget *centralwidget;
+  // QGridLayout *grid;
   QLabel *personProfile;
   QTableWidget *userFriends;
   QLabel *recentPosts;
@@ -33,61 +34,16 @@ public:
   QTableWidget *postsTable;
   QMenuBar *menubar;
   QStatusBar *statusbar;
+  QPushButton *makepost;
 
-  void setupUi(QWidget *ProfilePage) {
-    // ProfilePage->setObjectName("ProfilePage");
-    // ProfilePage->resize(800, 600);
-    centralwidget = new QWidget(ProfilePage);
-    centralwidget->setObjectName("centralwidget");
+  ProfilePageUi(QWidget *);
 
-    personProfile = new QLabel(centralwidget);
-    personProfile->setObjectName("personProfile");
-    personProfile->setGeometry(QRect(190, 60, 191, 16));
-    userFriends = new QTableWidget(centralwidget);
-    userFriends->setObjectName("userFriends");
-    userFriends->setGeometry(QRect(190, 80, 261, 171));
-    userFriends->horizontalHeader()->setCascadingSectionResizes(false);
-    userFriends->horizontalHeader()->setMinimumSectionSize(40);
-    userFriends->horizontalHeader()->setStretchLastSection(true);
-    recentPosts = new QLabel(centralwidget);
-    recentPosts->setObjectName("recentPosts");
-    recentPosts->setGeometry(QRect(30, 240, 401, 301));
-    recentPosts->setWordWrap(true);
-    returnHome = new QPushButton(centralwidget);
-    returnHome->setObjectName("returnHome");
-    returnHome->setGeometry(QRect(470, 40, 121, 21));
-    friendSuggestions = new QTableWidget(centralwidget);
-    friendSuggestions->setObjectName("friendSuggestions");
-    friendSuggestions->setGeometry(QRect(470, 80, 261, 171));
-    friendSuggestions->horizontalHeader()->setMinimumSectionSize(40);
-    friendSuggestions->horizontalHeader()->setStretchLastSection(true);
-    friendSuggestionsLabel = new QLabel(centralwidget);
-    friendSuggestionsLabel->setObjectName("friendSuggestionsLabel");
-    friendSuggestionsLabel->setGeometry(QRect(470, 60, 151, 21));
-    addFriend = new QPushButton(centralwidget);
-    addFriend->setObjectName("addFriend");
-    addFriend->setGeometry(QRect(190, 40, 261, 21));
-    postsTable = new QTableWidget(centralwidget);
-    postsTable->setObjectName("postsTable");
-    postsTable->setGeometry(QRect(10, 260, 721, 261));
-
-    reset();
-
-    // QMetaObject::connectSlotsByName(ProfilePage);
-  } // setupUi
-
-  void reset() {
-    personProfile->setText(
-        QCoreApplication::translate("ProfilePage", "My Profile", nullptr));
-    recentPosts->setText(
-        QCoreApplication::translate("ProfilePage", "Posts:", nullptr));
-    returnHome->setText(
-        QCoreApplication::translate("ProfilePage", "Return to home", nullptr));
-    friendSuggestionsLabel->setText(QCoreApplication::translate(
-        "ProfilePage", "Friend Suggestions", nullptr));
-    addFriend->setText(QCoreApplication::translate(
-        "ProfilePage", "Add __ as friend", nullptr));
+  ~ProfilePageUi() {
+    delete personProfile;
+    delete userFriends;
   }
+
+  void reset();
 };
 
 QT_END_NAMESPACE
@@ -133,7 +89,7 @@ public:
   void likePost(int row, int messageId, int userId);
 
 signals:
-  void goto_makepost();
+  void gomakepost();
 
 private:
   ProfilePageUi *ui;

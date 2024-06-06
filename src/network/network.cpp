@@ -298,9 +298,9 @@ std::vector<int> Network::shortestPath(int from, int to) {
     return {to};
   }
 
-  std::vector<node> seen = std::vector<node>{node{from, -1}};
+  std::vector<node> seen = std::vector<node>{node{from, -1, 0}};
 
-  int i = 0;
+  size_t i = 0;
 
   bool found = false;
 
@@ -312,7 +312,7 @@ std::vector<int> Network::shortestPath(int from, int to) {
     auto friends = u->getFriends();
     for (auto id : friends) {
       if (id == to) {
-        struct node n = {id, p_id};
+        struct node n = {id, p_id, 0};
         seen.push_back(n);
         found = true;
         break;
@@ -326,7 +326,7 @@ std::vector<int> Network::shortestPath(int from, int to) {
                              [id](struct node &n) { return n.id == id; });
 
       if (it == seen.end()) {
-        struct node n = {.id = id, .pr = p_id};
+        struct node n = {.id = id, .pr = p_id, .dp = 0};
         seen.push_back(n);
       }
     }
@@ -371,7 +371,7 @@ std::vector<int> Network::shortestPath(int from, int to) {
 std::vector<int> Network::distanceUser(int from, int &to, int distance) {
   std::vector<node> seen = std::vector<node>{node{from, -1, 0}};
 
-  int i = 0;
+  size_t i = 0;
   bool found = false;
 
   while (!found && i < seen.size()) {

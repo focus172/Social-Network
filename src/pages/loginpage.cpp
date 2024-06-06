@@ -61,10 +61,8 @@ void LoginPageUi::reset() {
 QT_END_NAMESPACE
 /* ******************************* */
 
-LoginPage::LoginPage(QWidget *parent, Network *const n)
+LoginPage::LoginPage(Network *const n, QWidget *parent)
     : QWidget(parent), ui(new LoginPageUi(this)), network(n) {
-
-  ui->errortext->hide();
 
   QObject::connect(ui->button, &QPushButton::clicked, this, &LoginPage::login);
 }

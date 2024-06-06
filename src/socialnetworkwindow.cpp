@@ -4,8 +4,10 @@
 QT_BEGIN_NAMESPACE
 
 SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
-                                             Network *net) {
+                                             Network *network) {
   SocialNetworkWindow->resize(800, 600);
+
+  // needed for reasons
   centralwidget = new QWidget(SocialNetworkWindow);
 
   /* ***************** Page Setup *************** */
@@ -13,10 +15,10 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   grid = new QGridLayout(centralwidget);
   viewstack = new QStackedWidget(centralwidget);
 
-  loginpage = new LoginPage(centralwidget, net);
+  loginpage = new LoginPage(network, centralwidget);
   viewstack->addWidget(loginpage);
 
-  profilepage = new ProfilePage(net, centralwidget);
+  profilepage = new ProfilePage(network, centralwidget);
   viewstack->addWidget(profilepage);
 
   makepostpage = new MakepostPage(centralwidget);
@@ -78,7 +80,7 @@ SocialNetworkWindow::SocialNetworkWindow()
                    &SocialNetworkWindow::showprofile);
 
   // profile ports
-  QObject::connect(ui->profilepage, &ProfilePage::goto_makepost, this,
+  QObject::connect(ui->profilepage, &ProfilePage::gomakepost, this,
                    &SocialNetworkWindow::show_makepost);
 
   // make post connection
@@ -95,7 +97,6 @@ SocialNetworkWindow::SocialNetworkWindow()
   // QObject::connect(ui->profile_suggested_table, &QTableWidget::cellClicked,
   //                  this, &SocialNetworkWindow::addsuggestedfriend);
 }
-
 
 SocialNetworkWindow::~SocialNetworkWindow() { delete ui; }
 

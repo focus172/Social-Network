@@ -24,8 +24,8 @@
 
 #include "network/network.h"
 #include "pages/loginpage.h"
-#include "pages/profilepage.h"
 #include "pages/makepostpage.h"
+#include "pages/profilepage.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -42,7 +42,7 @@ public:
   QMenuBar *menubar;
   QStatusBar *statusbar;
 
-  SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow, Network *net);
+  SocialNetworkWindowUi(QMainWindow *, Network *);
 };
 
 QT_END_NAMESPACE

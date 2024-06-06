@@ -1,8 +1,91 @@
 #include "profilepage.h"
 
+#include <QMainWindow>
+#include <QTableWidget>
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QWidget>
+
+#include "../network/network.h"
+#include <stack>
+
+QT_BEGIN_NAMESPACE
+
+ProfilePageUi::ProfilePageUi(QWidget *ProfilePage) {
+  // ProfilePage->setObjectName("ProfilePage");
+  // ProfilePage->resize(800, 600);
+
+  // grid = new QGridLayout(ProfilePage);
+
+  personProfile = new QLabel(ProfilePage);
+  personProfile->setObjectName("personProfile");
+  personProfile->setGeometry(QRect(190, 60, 191, 16));
+
+  userFriends = new QTableWidget(ProfilePage);
+  userFriends->setObjectName("userFriends");
+  userFriends->setGeometry(QRect(190, 80, 261, 171));
+  userFriends->horizontalHeader()->setCascadingSectionResizes(false);
+  userFriends->horizontalHeader()->setMinimumSectionSize(40);
+  userFriends->horizontalHeader()->setStretchLastSection(true);
+  recentPosts = new QLabel(ProfilePage);
+  recentPosts->setObjectName("recentPosts");
+  recentPosts->setGeometry(QRect(30, 240, 401, 301));
+  recentPosts->setWordWrap(true);
+
+  returnHome = new QPushButton(ProfilePage);
+  returnHome->setGeometry(QRect(470, 40, 121, 21));
+  // grid->addWidget(returnHome, 0, 0);
+  makepost = new QPushButton(ProfilePage);
+  makepost->setGeometry(QRect(10, 40, 121, 21));
+
+  friendSuggestions = new QTableWidget(ProfilePage);
+  friendSuggestions->setObjectName("friendSuggestions");
+  friendSuggestions->setGeometry(QRect(470, 80, 261, 171));
+  friendSuggestions->horizontalHeader()->setMinimumSectionSize(40);
+  friendSuggestions->horizontalHeader()->setStretchLastSection(true);
+
+  friendSuggestionsLabel = new QLabel(ProfilePage);
+  friendSuggestionsLabel->setObjectName("friendSuggestionsLabel");
+  friendSuggestionsLabel->setGeometry(QRect(470, 60, 151, 21));
+
+  addFriend = new QPushButton(ProfilePage);
+  addFriend->setObjectName("addFriend");
+  addFriend->setGeometry(QRect(190, 40, 261, 21));
+
+  postsTable = new QTableWidget(ProfilePage);
+  postsTable->setObjectName("postsTable");
+  postsTable->setGeometry(QRect(10, 260, 721, 261));
+
+  reset();
+}
+
+void ProfilePageUi::reset() {
+  personProfile->setText(
+      QCoreApplication::translate("ProfilePage", "My Profile", nullptr));
+  recentPosts->setText(
+      QCoreApplication::translate("ProfilePage", "Posts:", nullptr));
+  returnHome->setText(
+      QCoreApplication::translate("ProfilePage", "Return to home", nullptr));
+  friendSuggestionsLabel->setText(QCoreApplication::translate(
+      "ProfilePage", "Friend Suggestions", nullptr));
+  addFriend->setText(
+      QCoreApplication::translate("ProfilePage", "Add __ as friend", nullptr));
+  makepost->setText("make post");
+}
+
+QT_END_NAMESPACE
+
 ProfilePage::ProfilePage(Network *network, QWidget *parent)
-    : QWidget(parent), n(network), ui(new ProfilePageUi) {
-  ui->setupUi(this);
+    : QWidget(parent), ui(new ProfilePageUi(this)), n(network) {
 
   // connect everything
   connect(ui->returnHome, &QPushButton::clicked, this, &ProfilePage::goToHome);
@@ -124,6 +207,9 @@ void ProfilePage::login(User *u) {
                 // Call the likePost function with the messageId and userId
                 likePost(currentRow, messageId, userId);
               });
+
+      connect(ui->makepost, &QPushButton::clicked, this,
+              [this]() { emit gomakepost(); });
 
       // Insert the button into the table at row currentRow, column 2
       ui->postsTable->setCellWidget(currentRow, 2, button);
@@ -338,7 +424,7 @@ void ProfilePage::likePost(int row, int messageId, int userId) {
       QString::fromStdString(post->toString()));
 
   // Also update posts.txt
-  printf("TODO: update file after write")
+  printf("TODO: update file after write");
   // n->writePosts("C:\\Qt\\workspace\\Class\\HW4\\posts.txt");
 }
 
