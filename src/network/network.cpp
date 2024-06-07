@@ -402,7 +402,6 @@ int Network::read_posts_csv(const char *fname) {
       continue;
     }
     if (pub < 0) {
-      // regular post
       Post *p = new Post(id, owner, msg, likes);
       u->addPost(p);
     } else {
@@ -416,11 +415,6 @@ int Network::read_posts_csv(const char *fname) {
   return 0;
 }
 
-// To implement writePosts, you should load all of the posts from all the
-// users into a single vector of Post pointers, sort the Posts by their
-// messageId using the STL sort methodLinks to an external site., and then
-// write the posts in that order to a file. To call sort function, you
-// should implement a comparison function for comparing two Post pointers.
 int Network::write_posts_csv(const char *fname) {
   std::ofstream f = std::ofstream();
   f.open(fname);

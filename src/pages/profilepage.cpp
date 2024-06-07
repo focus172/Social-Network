@@ -451,9 +451,7 @@ void ProfilePage::likePost(int row, int messageId, int userId) {
   ui->postsTable->item(row, 1)->setText(
       QString::fromStdString(post->toString()));
 
-  // Also update posts.txt
-  printf("TODO: update file after write");
-  // n->writePosts("C:\\Qt\\workspace\\Class\\HW4\\posts.txt");
+  n->write_posts_csv("etc/posts.csv");
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
