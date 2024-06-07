@@ -23,18 +23,30 @@ QT_BEGIN_NAMESPACE
 
 class ProfilePageUi {
 public:
-  // QGridLayout *grid;
+  QVBoxLayout *vbox;
+
+  /// Root widget of the tab bar
+  QWidget *wtab;
+  /// Layout of the tab bar
+  QHBoxLayout *htab;
+  /// Widgets on the tab bar
+  QPushButton *makepost;
+  QPushButton *addFriend;
+  QPushButton *returnHome;
+
+  /// Root widget of the friends display
+  QWidget *wfri;
+  /// Layout of the friends
+  QHBoxLayout *hfri;
+
+  /// Widgets of the firends display
   QLabel *personProfile;
   QTableWidget *userFriends;
-  QLabel *recentPosts;
-  QPushButton *returnHome;
-  QTableWidget *friendSuggestions;
   QLabel *friendSuggestionsLabel;
-  QPushButton *addFriend;
+  QTableWidget *friendSuggestions;
+
+  QLabel *recentPosts;
   QTableWidget *postsTable;
-  QMenuBar *menubar;
-  QStatusBar *statusbar;
-  QPushButton *makepost;
 
   ProfilePageUi(QWidget *);
 
@@ -52,8 +64,6 @@ class ProfilePage : public QWidget {
   Q_OBJECT
 
 public:
-  // CONSTRUCTOR AND DESTRUCTOR
-
   // pre: none
   // post: creates the window for the ui
   ProfilePage(Network *network, QWidget *parent = nullptr);

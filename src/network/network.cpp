@@ -2,7 +2,6 @@
 #include "post.h"
 #include "user.h"
 
-#include "../json.hpp"
 #include "../util.h"
 
 #include <algorithm>
@@ -19,8 +18,7 @@
 #include <string>
 #include <utility>
 
-using nlohmann::json;
-
+/*
 void debug_user(User *u) {
   std::cout << "User { \n";
   std::cout << "\tname: " << u->getName() << "\n";
@@ -34,26 +32,7 @@ void debug_user(User *u) {
   std::cout << "\n";
   std::cout << "}" << std::endl;
 }
-
-struct node {
-  /// this nodes id
-  int id;
-  /// node that this came from
-  int pr;
-  /// number of step it took to get here
-  int dp;
-};
-
-void debug_node(node *n, char const *name) {
-  printf("%s {\n"
-         "  id: %d\n"
-         "  pr: %d\n"
-         // "  dp: %d\n"
-         "} node *;\n",
-         name, n->id, n->pr
-         // n->dp
-  );
-}
+*/
 
 Network::Network() {}
 
@@ -63,10 +42,7 @@ Network::~Network() {
   }
 }
 
-void Network::addUser(User *user) {
-  // TODO: update links in graph
-  this->users_.push_back(user);
-}
+void Network::addUser(User *user) { this->users_.push_back(user); }
 
 int Network::addConnection(std::string s1, std::string s2) {
   auto it1 = std::find_if(this->users_.begin(), this->users_.end(),
@@ -122,7 +98,48 @@ int Network::getId(std::string name) {
   return u->getId();
 }
 
+/* ******************** READ HELPERS *********************** */
 #define ASCII_ZERO 48
+
+int read_csv_int(FILE *f, int &val) {
+  val = 0;
+  for (;;) {
+    char c = fgetc(f);
+    switch (c) {
+    case EOF:
+      return EOF;
+    case ',':
+      return 1;
+    default:
+      int v = c - ASCII_ZERO;
+      if (v < 0 || v > 9) {
+        printf("bad int literal: '%c'\n"
+               "parsed as: %d\n",
+               c, v);
+        return 0;
+      }
+
+      val *= 10; // 0 * 10 = 0
+      val += v;
+    }
+  }
+}
+
+int read_csv_name(FILE *f, std::string &val) {
+  for (;;) {
+    char c = fgetc(f);
+    switch (c) {
+    case EOF:
+      return EOF;
+    case ',':
+    case '\n':
+      return 1;
+    default:
+      val.push_back(c);
+      break;
+    }
+  }
+}
 
 int read_links(FILE *f, std::set<int> &set) {
   bool val_undefined = true;
@@ -164,116 +181,69 @@ int read_links(FILE *f, std::set<int> &set) {
   }
   return 1;
 }
+/* ********* END READ HELPERS *********************** */
 
-int Network::readUsers(const char *fname) {
-  int code = EXIT_SUCCESS;
-
-  FILE *f = fopen(fname, "r");
-  if (f == NULL) {
-    printf("could not open file %s \n", fname);
+int Network::read_users_csv(const char *fname) {
+  auto f = fopen(fname, "r");
+  if (!f)
     return -1;
-  }
-
-  int nusers;
-  int ret = fscanf(f, "%d", &nusers);
-  switch (ret) {
-  case EOF:
-    code = -1;
-    // std::cout << "expected an int found EOF\n";
-    goto cleanup;
-  case 0:
-    code = -1;
-    // std::cout << "expected an int found other\n";
-    goto cleanup;
-  default:
-    break;
-  }
-  this->users_.reserve(nusers + 1);
 
   for (;;) {
-    int id;
-    switch (fscanf(f, "%d", &id)) {
-    case EOF:
-      goto cleanup;
-    case 0:
-      code = -1;
-      goto cleanup;
-    }
+    int r;
+    int id = 0;
+    r = read_csv_int(f, id);
+    if (r == EOF)
+      return 0;
+    if (r == 0)
+      return -1;
+    // printf("got id: %d\n", id);
 
-    char *name = new char[32];
-    char *last = new char[32];
+    std::string name;
+    if (!read_csv_name(f, name))
+      return -1;
+    // printf("got name: %s\n", name.c_str());
+
     int year;
+    if (!read_csv_int(f, year))
+      return -1;
+    // printf("got year: %d\n", year);
+
     int zip;
-
-    int ret = fscanf(f, "\t%31s %31s\n\t%d\n\t%d\n\t", name, last, &year, &zip);
-
-    switch (ret) {
-    case EOF:
-      // std::cout << "Unexpected EOF in stream.\n";
-      code = -1;
-      delete[] name;
-      delete[] last;
-      return code;
-    case 0:
-      // std::cout << "Ill formatted file.\n";
-      code = -1;
-      delete[] name;
-      delete[] last;
-      goto cleanup;
-    }
+    if (!read_csv_int(f, zip))
+      return -1;
+    // printf("got zip: %d\n", zip);
 
     std::set<int> links;
-
-    switch (read_links(f, links)) {
-    case EOF:
-      delete[] name;
-      delete[] last;
-      goto cleanup;
-    case 0:
-      delete[] name;
-      delete[] last;
-      goto cleanup;
-    }
-
-    std::string n = std::string(name);
-    std::string l = std::string(last);
-    User *u = new User(id, n + " " + l, year, zip, links);
-    // debug_user(u);
+    if (!read_links(f, links))
+      return -1;
+    // printf("got links: ");
+    // for (auto l : links) { printf("%d ", l); }
+    // printf("\n");
+    //
+    User *u = new User(id, name, year, zip, links);
     this->addUser(u);
-
-    delete[] name;
-    delete[] last;
   }
 
-cleanup:
-  fclose(f);
-  return code;
+  return 0;
 }
 
-int Network::writeUsers(const char *fname) {
+int Network::write_users_csv(const char *fname) {
   std::ofstream f = std::ofstream();
   f.open(fname);
-  if (!f.is_open()) {
+  if (!f.is_open())
     return -1;
-  }
 
-  f << this->numUsers() << "\n";
-  auto users = this->getUsers();
-  for (auto user : users) {
-    f << user->getId() << "\n";
-    f << "\t" << user->getName() << "\n";
-    f << "\t" << user->getYear() << "\n";
-    f << "\t" << user->getZip() << "\n";
-    auto fre = user->getFriends();
-    f << "\t";
-    for (auto fr : fre) {
-      // TODO: this has a trailing white space on last thing
+  for (auto u : this->users_) {
+    f << u->getId() << ",";
+    f << u->getName() << ",";
+    f << u->getYear() << ",";
+    f << u->getZip() << ",";
+    auto friends = u->getFriends();
+    for (auto fr : friends) {
       f << fr << " ";
     }
     f << "\n";
   }
-
-  f.close();
   return 0;
 }
 
@@ -291,138 +261,6 @@ User *Network::getUser(int id) {
 }
 
 std::vector<User *> const &Network::getUsers() { return this->users_; }
-
-/// TODO: better tests
-std::vector<int> Network::shortestPath(int from, int to) {
-  if (to == from) {
-    return {to};
-  }
-
-  std::vector<node> seen = std::vector<node>{node{from, -1, 0}};
-
-  size_t i = 0;
-
-  bool found = false;
-
-  while (!found && i < seen.size()) {
-    node &node = seen[i];
-    int p_id = node.id;
-
-    User *u = this->getUser(node.id);
-    auto friends = u->getFriends();
-    for (auto id : friends) {
-      if (id == to) {
-        struct node n = {id, p_id, 0};
-        seen.push_back(n);
-        found = true;
-        break;
-      }
-      if (id == u->getId()) {
-        continue;
-      }
-
-      // check if the thing exists
-      auto it = std::find_if(seen.begin(), seen.end(),
-                             [id](struct node &n) { return n.id == id; });
-
-      if (it == seen.end()) {
-        struct node n = {.id = id, .pr = p_id, .dp = 0};
-        seen.push_back(n);
-      }
-    }
-
-    i += 1;
-  }
-
-  if (found) {
-    std::vector<int> ret = {};
-
-    for (int nid = seen.back().id; nid != -1;) {
-      auto it = std::find_if(seen.begin(), seen.end(),
-                             [nid](struct node &n) { return n.id == nid; });
-
-      node *n = &*it;
-      // debug_node(n, "n");
-      ret.push_back(n->id);
-      nid = n->pr;
-    }
-
-    std::reverse(ret.begin(), ret.end());
-
-    // printf("nodes := ");
-    // int i = 0;
-    // for (auto rn : ret) {
-    //   if (i == 0) {
-    //     i = 1;
-    //   } else {
-    //     printf(" -> ");
-    //   }
-    //   printf("%d", rn);
-    // }
-    // printf("\n");
-
-    return ret;
-  } else {
-    return {};
-  }
-}
-
-/// TODO: impl
-std::vector<int> Network::distanceUser(int from, int &to, int distance) {
-  std::vector<node> seen = std::vector<node>{node{from, -1, 0}};
-
-  size_t i = 0;
-  bool found = false;
-
-  while (!found && i < seen.size()) {
-    int p_id = seen[i].id;
-    int dp = seen[i].dp;
-    if (dp >= distance) {
-      found = true;
-      break;
-    }
-
-    User *u = this->getUser(p_id);
-    auto friends = u->getFriends();
-    for (auto id : friends) {
-      // check if the thing exists
-      auto it = std::find_if(seen.begin(), seen.end(),
-                             [id](struct node &n) { return n.id == id; });
-
-      if (it == seen.end()) {
-        struct node n = {.id = id, .pr = p_id, .dp = dp + 1};
-        seen.push_back(n);
-      }
-    }
-
-    i += 1;
-  }
-
-  if (found) {
-    node &last = seen[i];
-
-    to = last.id;
-
-    std::vector<int> ret = {};
-
-    for (int nid = seen.back().id; nid != -1;) {
-      auto it = std::find_if(seen.begin(), seen.end(),
-                             [nid](struct node &n) { return n.id == nid; });
-
-      node *n = &*it;
-      // debug_node(n, "n");
-      ret.push_back(n->id);
-      nid = n->pr;
-    }
-
-    std::reverse(ret.begin(), ret.end());
-
-    return ret;
-  } else {
-    to = -1;
-    return {};
-  }
-}
 
 /// TODO: impl
 std::vector<int> Network::suggestFriends(int who, int &score) {
@@ -515,22 +353,8 @@ std::vector<std::vector<int>> Network::groups() {
   return groups;
 }
 
-// void Network::addPost(int ownerId, std::string message, std::set<int> likes,
-//                       bool isIncoming, std::string authorName, bool isPublic)
-//                       {
-//   User *u = this->getUser(ownerId);
-//
-//   if (u == nullptr)
-//     return;
-//
-//   int id = u->getPosts().size() + 1;
-//   Post *p = new Post(id, ownerId, message, likes);
-//   u->addPost(p);
-// }
-
 std::string Network::getPostsString(int ownerId, int howMany,
                                     bool showOnlyPublic) {
-
   User *u = this->getUser(ownerId);
 
   if (u == nullptr)
@@ -539,169 +363,56 @@ std::string Network::getPostsString(int ownerId, int howMany,
   return u->getPostsString(howMany, showOnlyPublic);
 }
 
-#define handle_fscanf_err(ret)                                                 \
-  switch (ret) {                                                               \
-  case EOF:                                                                    \
-    fprintf(stderr, "Unexpected EOF in stream.\n");                            \
-    goto cleanup;                                                              \
-  case 0:                                                                      \
-    fprintf(stderr, "[%s:%d]: Ill formatted file.\n", __FILE__, __LINE__);     \
-    goto cleanup;                                                              \
-  }
-
-#define scan_error(f)                                                          \
-  if (!f) {                                                                    \
-    fprintf(stderr, "[%s:%d]: Ill formatted file.\n", __FILE__, __LINE__);     \
-    goto cleanup;                                                              \
-  }
-
-int Network::readPosts(const char *fname) {
-  std::ifstream f(fname);
-  if (!f.is_open()) {
-    printf("could not open file %s \n", fname);
+int Network::read_posts_csv(const char *fname) {
+  auto f = fopen(fname, "r");
+  if (!f)
     return -1;
-  }
-
-  // 1: single number representing how many posts are in the file
-  int nusers;
-  f >> nusers;
-  scan_error(f);
 
   for (;;) {
     // 2: messageId_0
+    // in
     int id;
-    f >> id;
-    if (f.eof()) {
+    int ret = read_csv_int(f, id);
+    if (ret == EOF)
       break;
-    }
-    scan_error(f);
-    // fprintf(stderr, "got id: %d\n", id);
+    // printf("got id: %d\n", id);
 
-    f.ignore(2);
-    // 3: <TAB>message text
-    std::string msg;
-    std::getline(f, msg);
-    scan_error(f);
+    std::string msg = "";
+    read_csv_name(f, msg);
+    // printf("got msg: %s\n", msg.c_str());
 
-    // fprintf(stderr, "got msg: %s\n", msg.c_str());
-
-    // 4: <TAB>ownerId
     int owner;
+    read_csv_int(f, owner);
+    // printf("got owner: %d\n", owner);
 
-    // 5: <TAB>likes
     int likes;
+    read_csv_int(f, likes);
+    // printf("got likes: %d\n", likes);
 
-    f >> owner >> likes;
-    scan_error(f);
+    int pub = -1;
+    read_csv_int(f, pub);
+    // printf("got pub: %d\n", pub);
 
-    // fprintf(stderr, "got owner: %d\n", owner);
-    // fprintf(stderr, "got likes: %d\n", likes);
-
-    f.ignore(1);
-
-    // 6: <TAB>an empty line if the message is an owner Post OR the string
-    // "public" or "private" if the message is an IncomingPost
-    std::string type;
-    std::getline(f, type);
-    scan_error(f);
-
-    // fprintf(stderr, "got type: %s\n", type.c_str());
-
-    // 7: <TAB>an empty line if the message is an owner Post OR an author
-    // if the message is an IncomingPost
-    std::string author;
-    std::getline(f, author);
-    scan_error(f);
-
-    // fprintf(stderr, "got author: %s\n", author.c_str());
+    std::string sender = "";
+    read_csv_name(f, sender);
+    // printf("got sender: %s\n", sender.c_str());
 
     User *u = this->getUser(owner);
     if (u == nullptr) {
       continue;
     }
-
-    if (type.size() == 0) {
+    if (pub < 0) {
+      // regular post
       Post *p = new Post(id, owner, msg, likes);
       u->addPost(p);
     } else {
-
-      bool publ;
-      if (type == "\tprivate") {
-        publ = false;
-      } else if (type == "\tpublic") {
-        publ = true;
-      } else {
-        fprintf(stderr, "unknown message publicity: %s\n", type.c_str());
-        goto cleanup;
-      }
-
-      author = author.substr(1);
-
-      Post *p = new IncomingPost(id, owner, msg, likes, publ, author);
+      bool publ = pub == 1 ? true : false;
+      Post *p = new IncomingPost(id, owner, msg, likes, publ, sender);
       u->addPost(p);
     }
   }
 
-  f.close();
-  return 0;
-
-cleanup:
-  f.close();
-  return -1;
-}
-
-int Network::read_posts_json(const char *fname) {
-  nlohmann::json j;
-
-  std::ifstream f("posts.json");
-  f >> j;
-
-  assert(j.is_array());
-  for (auto post : j) {
-    auto v_id = post["id"];
-    gaurd(v_id.is_number_integer());
-    int id = v_id.get<int>();
-
-    auto v_author = post["author"];
-    gaurd(v_author.is_number_integer());
-    int authorid = v_author.get<int>();
-
-    auto v_message = post["message"];
-    gaurd(v_message.is_string());
-    std::string message = v_message.get<std::string>();
-
-    auto v_likes = post["likes"];
-    gaurd(v_likes.is_array());
-    std::set<int> likes = v_likes.template get<std::set<int>>();
-
-    auto v_public = post["public"];
-    auto v_recipient = post["recipient"];
-
-    // if there is data for both of those feilds then if it is not incomming
-    bool incomming = !v_public.is_null() && !v_public.is_null();
-
-    if (incomming) {
-      gaurd(v_recipient.is_number_integer());
-      int recipient = v_recipient.template get<int>();
-
-      User *u = this->getUser(recipient);
-
-      gaurd(v_public.is_boolean());
-      bool ispublic = v_public.template get<bool>();
-
-      auto auth = this->getUser(authorid);
-      std::string author = auth->getName();
-
-      // Post *p = new IncomingPost(id, recipient, message, likes, ispublic,
-      // author); u->addPost(p);
-
-    } else {
-      User *u = this->getUser(authorid);
-      printf("TOOD: [%s]: %d\n", __FILE__, __LINE__);
-      // Post *p = new Post(id, authorid, message, likes);
-      // u->addPost(p);
-    }
-  }
+  fclose(f);
   return 0;
 }
 
@@ -710,35 +421,30 @@ int Network::read_posts_json(const char *fname) {
 // messageId using the STL sort methodLinks to an external site., and then
 // write the posts in that order to a file. To call sort function, you
 // should implement a comparison function for comparing two Post pointers.
-int Network::writePosts(const char *fname) { return 0; }
+int Network::write_posts_csv(const char *fname) {
+  std::ofstream f = std::ofstream();
+  f.open(fname);
+  if (!f.is_open())
+    return -1;
 
-// {
-//     "id": int,
-//     "author": int,
-//     "message": std::string,
-//     "likes": std::set<int>,
-//     "public": null or bool,
-//     "recipient": null or int
-// }
-int Network::write_posts_json(const char *fname) {
-  json j = json::array();
+  for (User *user : this->users_) {
+    for (Post *post : user->getPosts()) {
+      f << post->getMessageId() << ",";
+      f << post->getMessage() << ",";
+      f << post->getOwnerId() << ",";
+      // post->getLiked();
+      f << post->getLikes() << ",";
 
-  std::ofstream f(fname);
-
-  for (auto u : this->users_) {
-    auto s = u->getPosts();
-    // std::dynamic_pointer_cast<k>(const shared_ptr<Up> &r)
-
-    for (auto p : s) {
-      j.push_back({{"author", p->getOwnerId()},
-                   {"message", p->getMessage()},
-                   {"owner", p->getOwnerId()},
-                   {"public", p->getIsPublic()},
-                   {"id", p->getMessageId()}});
+      IncomingPost *ip = dynamic_cast<IncomingPost *>(post);
+      if (ip == nullptr) {
+        f << ",";
+      } else {
+        f << ip->getIsPublic() << ",";
+        f << ip->getAuthor();
+      }
+      f << "\n";
+      // f << "\n";
     }
   }
-
-  f << j;
-
   return 0;
 }

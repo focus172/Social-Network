@@ -18,52 +18,65 @@
 #include "../network/network.h"
 #include <stack>
 
+/* ******************************** */
 QT_BEGIN_NAMESPACE
 
 ProfilePageUi::ProfilePageUi(QWidget *ProfilePage) {
   // ProfilePage->setObjectName("ProfilePage");
   // ProfilePage->resize(800, 600);
 
-  // grid = new QGridLayout(ProfilePage);
+  vbox = new QVBoxLayout(ProfilePage);
 
   personProfile = new QLabel(ProfilePage);
-  personProfile->setObjectName("personProfile");
-  personProfile->setGeometry(QRect(190, 60, 191, 16));
+  vbox->addWidget(personProfile);
 
-  userFriends = new QTableWidget(ProfilePage);
-  userFriends->setObjectName("userFriends");
-  userFriends->setGeometry(QRect(190, 80, 261, 171));
-  userFriends->horizontalHeader()->setCascadingSectionResizes(false);
-  userFriends->horizontalHeader()->setMinimumSectionSize(40);
-  userFriends->horizontalHeader()->setStretchLastSection(true);
-  recentPosts = new QLabel(ProfilePage);
-  recentPosts->setObjectName("recentPosts");
-  recentPosts->setGeometry(QRect(30, 240, 401, 301));
-  recentPosts->setWordWrap(true);
+  {
+    wtab = new QWidget(ProfilePage);
 
-  returnHome = new QPushButton(ProfilePage);
-  returnHome->setGeometry(QRect(470, 40, 121, 21));
-  // grid->addWidget(returnHome, 0, 0);
-  makepost = new QPushButton(ProfilePage);
-  makepost->setGeometry(QRect(10, 40, 121, 21));
+    htab = new QHBoxLayout(wtab);
 
-  friendSuggestions = new QTableWidget(ProfilePage);
-  friendSuggestions->setObjectName("friendSuggestions");
-  friendSuggestions->setGeometry(QRect(470, 80, 261, 171));
-  friendSuggestions->horizontalHeader()->setMinimumSectionSize(40);
-  friendSuggestions->horizontalHeader()->setStretchLastSection(true);
+    makepost = new QPushButton(wtab);
+    htab->addWidget(makepost);
+
+    returnHome = new QPushButton(wtab);
+    htab->addWidget(returnHome);
+
+    addFriend = new QPushButton(wtab);
+    htab->addWidget(addFriend);
+
+    vbox->addWidget(wtab);
+  }
 
   friendSuggestionsLabel = new QLabel(ProfilePage);
-  friendSuggestionsLabel->setObjectName("friendSuggestionsLabel");
-  friendSuggestionsLabel->setGeometry(QRect(470, 60, 151, 21));
+  vbox->addWidget(friendSuggestionsLabel);
+  // friendSuggestionsLabel->setGeometry(QRect(470, 60, 151, 21));
+  {
+    wfri = new QWidget(ProfilePage);
 
-  addFriend = new QPushButton(ProfilePage);
-  addFriend->setObjectName("addFriend");
-  addFriend->setGeometry(QRect(190, 40, 261, 21));
+    hfri = new QHBoxLayout(wfri);
+
+    friendSuggestions = new QTableWidget(wfri);
+    friendSuggestions->horizontalHeader()->setMinimumSectionSize(40);
+    friendSuggestions->horizontalHeader()->setStretchLastSection(true);
+    hfri->addWidget(friendSuggestions);
+
+    userFriends = new QTableWidget(wfri);
+    userFriends->horizontalHeader()->setCascadingSectionResizes(false);
+    userFriends->horizontalHeader()->setMinimumSectionSize(40);
+    userFriends->horizontalHeader()->setStretchLastSection(true);
+    hfri->addWidget(userFriends);
+
+    vbox->addWidget(wfri);
+  }
+
+  recentPosts = new QLabel(ProfilePage);
+  vbox->addWidget(recentPosts);
+  // recentPosts->setGeometry(QRect(30, 240, 401, 301));
+  // recentPosts->setWordWrap(true);
 
   postsTable = new QTableWidget(ProfilePage);
-  postsTable->setObjectName("postsTable");
-  postsTable->setGeometry(QRect(10, 260, 721, 261));
+  vbox->addWidget(postsTable);
+  // postsTable->setGeometry(QRect(10, 260, 721, 261));
 
   reset();
 }
@@ -83,6 +96,7 @@ void ProfilePageUi::reset() {
 }
 
 QT_END_NAMESPACE
+/* ******************************** */
 
 ProfilePage::ProfilePage(Network *network, QWidget *parent)
     : QWidget(parent), ui(new ProfilePageUi(this)), n(network) {
@@ -106,6 +120,8 @@ void ProfilePage::login(User *u) {
   int numberFriends = uFriends.size();
   ui->userFriends->setRowCount(numberFriends);
   ui->userFriends->setColumnCount(1);
+
+  ui->addFriend->hide();
 
   int i = 0;
   for (auto itr = uFriends.begin(); itr != uFriends.end(); ++itr) {
@@ -142,6 +158,8 @@ void ProfilePage::login(User *u) {
   std::set<int> friends = u->getFriends();
   for (int friendId : friends) {
     User *friendUser = n->getUser(friendId);
+    if (friendUser == nullptr)
+      continue;
     totalPosts += friendUser->getPosts().size();
   }
 
@@ -162,6 +180,9 @@ void ProfilePage::login(User *u) {
   // Iterate over all friends
   for (int friendId : friends) {
     User *friendUser = n->getUser(friendId);
+
+    if (friendUser == nullptr)
+      continue;
 
     // Get all posts from the current friend
     std::vector<Post *> posts = friendUser->getPosts();
@@ -208,8 +229,8 @@ void ProfilePage::login(User *u) {
                 likePost(currentRow, messageId, userId);
               });
 
-      connect(ui->makepost, &QPushButton::clicked, this,
-              [this]() { emit gomakepost(); });
+      QObject::connect(ui->makepost, &QPushButton::clicked, this,
+                       [this]() { emit gomakepost(); });
 
       // Insert the button into the table at row currentRow, column 2
       ui->postsTable->setCellWidget(currentRow, 2, button);
@@ -242,7 +263,6 @@ void ProfilePage::goToHome() {
 
   // read in users, it might have changed
   printf("TODO: user could have changed since loading\n");
-  // n.readUsers("C:\\Qt\\workspace\\Class\\HW4\\users.txt");
 
   // have to show and hide stuff
   ui->returnHome->setVisible(false);
@@ -389,8 +409,7 @@ void ProfilePage::addAsFriend() {
   n->addConnection(originalUName, recentUName);
 
   // change the txt file of user and post
-  printf("TODO: write user files\n");
-  // n->writeUsers("C:\\Qt\\workspace\\Class\\HW4\\users.txt");
+  n->write_users_csv("etc/users.csv");
   // n->writePosts("C:\\Qt\\workspace\\Class\\HW4\\posts.txt");
 
   // remake friend suggestions based on this new connection

@@ -3,9 +3,9 @@
 #include <QApplication>
 
 int main(int argc, char *argv[]) {
+  srand(time(nullptr));
   QApplication a(argc, argv);
   SocialNetworkWindow w;
-    srand(time(nullptr));
   w.show();
   return a.exec();
 }

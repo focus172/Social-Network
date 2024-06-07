@@ -52,9 +52,7 @@ void LoginPageUi::reset() {
   button->setText(
       QCoreApplication::translate("SocialNetworkWindow", "Login", nullptr));
 
-  // Reset and hide error
-  errortext->setText(
-      QCoreApplication::translate("SocialNetworkWindow", "~~~~~", nullptr));
+  // hide error
   errortext->hide();
 }
 
@@ -75,8 +73,8 @@ void LoginPage::login() {
 
   int id = network->getId(s);
   if (id < 0) {
-    this->ui->errortext->setText(QString::asprintf("No user: %s", s.c_str()));
-    this->ui->errortext->show();
+    ui->errortext->setText(QString::asprintf("No user: %s", s.c_str()));
+    ui->errortext->show();
   } else {
     ui->errortext->hide();
     emit loggedin(id);

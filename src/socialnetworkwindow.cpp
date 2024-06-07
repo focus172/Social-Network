@@ -48,20 +48,14 @@ QT_END_NAMESPACE
 SocialNetworkWindow::SocialNetworkWindow()
     : QMainWindow(nullptr), curr(), user() {
 
-  int ret = network.readUsers("users.txt");
+  int ret = network.read_users_csv("etc/users.csv");
   if (ret < 0) {
-    // try backup location
-    ret = network.readUsers("etc/users.txt");
-    if (ret < 0)
-      throw;
+    throw;
   }
 
-  ret = network.readPosts("posts.txt");
+  ret = network.read_posts_csv("etc/posts.csv");
   if (ret < 0) {
-    // try backup location
-    ret = network.readPosts("etc/posts.txt");
-    if (ret < 0)
-      throw;
+    throw;
   }
 
   ui = new SocialNetworkWindowUi(this, &network);
@@ -113,8 +107,9 @@ void SocialNetworkWindow::add_post(Post *p) {
     return;
   }
 
-  printf("TODO: fix post not being added by uncommenting next line\n");
-  // u->addPost(p);
+  // printf("TODO: fix post not being added by uncommenting next line\n");
+  u->addPost(p);
+  network.write_posts_csv("etc/posts.csv");
   this->ui->viewstack->setCurrentIndex(1);
 }
 

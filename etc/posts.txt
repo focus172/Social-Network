@@ -54,7 +54,7 @@
 
 
 9
-	As the rental car rolled to a stop on the dark road, her fear increased by the moment.
+	As the rental car rolled to a stop on the dark road her fear increased by the moment.
 	70
 	2
 	private
@@ -96,7 +96,7 @@
 
 
 16
-	I love bacon, beer, birds, and baboons.
+	I love bacon beer birds and baboons.
 	2
 	1
 	public
@@ -234,7 +234,7 @@
 	public
 	Connor Norris
 39
-	He realized there had been several deaths on this road, but his concern rose when he saw the exact number.
+	He realized there had been several deaths on this road but his concern rose when he saw the exact number.
 	106
 	1
 	private
@@ -258,7 +258,7 @@
 
 
 43
-	The sunblock was handed to the girl before practice, but the burned skin was proof she did not apply it.
+	The sunblock was handed to the girl before practice but the burned skin was proof she did not apply it.
 	15
 	1
 	public
@@ -270,7 +270,7 @@
 
 
 45
-	I really want to go to work, but I am too sick to drive.
+	I really want to go to work but I am too sick to drive.
 	23
 	4
 
@@ -330,7 +330,7 @@
 
 
 55
-	Choosing to do nothing is still a choice, after all.
+	Choosing to do nothing is still a choice after all.
 	51
 	5
 	public
@@ -390,7 +390,7 @@
 
 
 65
-	There should have been a time and a place, but this wasn't it.
+	There should have been a time and a place but this wasn't it.
 	32
 	3
 	public
@@ -426,7 +426,7 @@
 	public
 	Xian Liang
 71
-	You can't compare apples and oranges, but what about bananas and plantains?
+	You can't compare apples and oranges but what about bananas and plantains?
 	135
 	0
 	private
@@ -438,7 +438,7 @@
 	private
 	Nicolas Lozoya
 73
-	He said he was not there yesterday; however, many people saw him there.
+	He said he was not there yesterday; however many people saw him there.
 	15
 	1
 	private
@@ -450,7 +450,7 @@
 	private
 	Aled Montes
 75
-	She learned that water bottles are no longer just to hold liquid, but they're also status symbols.
+	She learned that water bottles are no longer just to hold liquid but they're also status symbols.
 	52
 	0
 	private
@@ -504,13 +504,13 @@
 
 
 84
-	No matter how beautiful the sunset, it saddened her knowing she was one day older.
+	No matter how beautiful the sunset it saddened her knowing she was one day older.
 	55
 	3
 	public
 	Jia Jun
 85
-	As she walked along the street and looked in the gutter, she realized facemasks had become the new cigarette butts.
+	As she walked along the street and looked in the gutter she realized facemasks had become the new cigarette butts.
 	17
 	5
 	private
@@ -528,7 +528,7 @@
 
 
 88
-	When motorists sped in and out of traffic, all she could think of was those in need of a transplant.
+	When motorists sped in and out of traffic all she could think of was those in need of a transplant.
 	133
 	5
 
@@ -552,7 +552,7 @@
 	private
 	Mahamari Chakpram
 92
-	At that moment he wasn't listening to music, he was living an experience.
+	At that moment he wasn't listening to music he was living an experience.
 	86
 	6
 
@@ -570,7 +570,7 @@
 
 
 95
-	I think I will buy the red car, or I will lease the blue one.
+	I think I will buy the red car or I will lease the blue one.
 	69
 	5
 
@@ -594,7 +594,7 @@
 	private
 	Xian Liang
 99
-	They say people remember important moments in their life well, yet no one even remembers their own birth.
+	They say people remember important moments in their life well yet no one even remembers their own birth.
 	4
 	3
 
@@ -612,7 +612,7 @@
 	public
 	Paul Hines
 102
-	When he asked her favorite number, she answered without hesitation that it was diamonds.
+	When he asked her favorite number she answered without hesitation that it was diamonds.
 	70
 	1
 
@@ -642,7 +642,7 @@
 	public
 	Kirsty Golden
 107
-	I had a friend in high school named Rick Shaw, but he was fairly useless as a mode of transport.
+	I had a friend in high school named Rick Shaw but he was fairly useless as a mode of transport.
 	139
 	6
 	private
@@ -696,7 +696,7 @@
 	public
 	Varun Desai
 116
-	If you really strain your ears, you can just about hear the sound of no one giving a damn.
+	If you really strain your ears you can just about hear the sound of no one giving a damn.
 	102
 	10
 	private
@@ -762,7 +762,7 @@
 
 
 127
-	Despite what your teacher may have told you, there is a wrong way to wield a lasso.
+	Despite what your teacher may have told you there is a wrong way to wield a lasso.
 	51
 	5
 
@@ -774,7 +774,7 @@
 
 
 129
-	Red is greener than purple, for sure.
+	Red is greener than purple for sure.
 	35
 	2
 	public
@@ -810,7 +810,7 @@
 
 
 135
-	Of course, she loves her pink bunny slippers.
+	Of course she loves her pink bunny slippers.
 	25
 	2
 
@@ -840,7 +840,7 @@
 	public
 	Peng Lan
 140
-	Various sea birds are elegant, but nothing is as elegant as a gliding pelican.
+	Various sea birds are elegant but nothing is as elegant as a gliding pelican.
 	107
 	1
 	public
@@ -924,7 +924,7 @@
 	private
 	Eliot Moses
 154
-	I am counting my calories, yet I really want dessert.
+	I am counting my calories yet I really want dessert.
 	71
 	2
 
@@ -954,7 +954,7 @@
 	private
 	Zainab Stephenson
 159
-	Mary realized if her calculator had a history, it would be more embarrassing than her computer browser history.
+	Mary realized if her calculator had a history it would be more embarrassing than her computer browser history.
 	45
 	4
 	private
@@ -996,7 +996,7 @@
 	private
 	Cira Villarrubia
 166
-	25 years later, she still regretted that specific moment.
+	25 years later she still regretted that specific moment.
 	9
 	0
 
@@ -1008,7 +1008,7 @@
 
 
 168
-	Hang on, my kittens are scratching at the bathtub and they'll upset by the lack of biscuits.
+	Hang on my kittens are scratching at the bathtub and they'll upset by the lack of biscuits.
 	75
 	5
 
@@ -1056,13 +1056,13 @@
 	public
 	Kong Ning
 176
-	I want a giraffe, but I'm a turtle eating waffles.
+	I want a giraffe but I'm a turtle eating waffles.
 	34
 	0
 
 
 177
-	As time wore on, simple dog commands turned into full paragraphs explaining why the dog couldn’t do something.
+	As time wore on simple dog commands turned into full paragraphs explaining why the dog couldn’t do something.
 	113
 	1
 	private
@@ -1086,7 +1086,7 @@
 
 
 181
-	She wanted to be rescued, but only if it was Tuesday and raining.
+	She wanted to be rescued but only if it was Tuesday and raining.
 	58
 	7
 
@@ -1170,7 +1170,7 @@
 	private
 	Frank Campbell
 195
-	Peanuts don't grow on trees, but cashews do.
+	Peanuts don't grow on trees but cashews do.
 	122
 	3
 	private
@@ -1236,7 +1236,7 @@
 
 
 206
-	The moon is made of cheese, and astronauts go there for intergalactic fondue parties.
+	The moon is made of cheese and astronauts go there for intergalactic fondue parties.
 	75
 	4
 
@@ -1266,7 +1266,7 @@
 	public
 	Hernandez Vicencio
 211
-	The clouds were having a pillow fight, and it rained feathers for days.
+	The clouds were having a pillow fight and it rained feathers for days.
 	55
 	3
 	public
@@ -1290,7 +1290,7 @@
 	private
 	Shitala Cheema
 215
-	The rubber duck rebellion took over the bathtub, demanding more bubble baths for everyone.
+	The rubber duck rebellion took over the bathtub demanding more bubble baths for everyone.
 	90
 	1
 
@@ -1320,7 +1320,7 @@
 
 
 220
-	I accidentally watered my plants with fruit punch, and now they're growing fruit salad.
+	I accidentally watered my plants with fruit punch and now they're growing fruit salad.
 	143
 	1
 	private
@@ -1332,7 +1332,7 @@
 
 
 222
-	The talking cactus hosted a radio show for desert creatures, discussing sand dune fashion trends.
+	The talking cactus hosted a radio show for desert creatures discussing sand dune fashion trends.
 	35
 	0
 	private
@@ -1404,19 +1404,19 @@
 
 
 234
-	The toothpaste rebelled against the toothbrush, demanding independence for oral hygiene products.
+	The toothpaste rebelled against the toothbrush demanding independence for oral hygiene products.
 	8
 	4
 	private
 	Hermione Sutton
 235
-	The rubber chicken became a motivational speaker, inspiring other rubber chickens to "wing it" in life.
+	The rubber chicken became a motivational speaker inspiring other rubber chickens to "wing it" in life.
 	90
 	6
 	public
 	Jana Edwards
 236
-	The popcorn kernels organized a protest against microwaves, advocating for a return to traditional popping methods.
+	The popcorn kernels organized a protest against microwaves advocating for a return to traditional popping methods.
 	37
 	6
 
@@ -1434,7 +1434,7 @@
 
 
 239
-	The superhero mosquito saved the day by draining all the blood from the evil mastermind, leaving them light-headed.
+	The superhero mosquito saved the day by draining all the blood from the evil mastermind leaving them light-headed.
 	89
 	1
 
@@ -1452,7 +1452,7 @@
 
 
 242
-	The rubber duck became a life coach, offering quackingly good advice for navigating the challenges of pond life.
+	The rubber duck became a life coach offering quackingly good advice for navigating the challenges of pond life.
 	104
 	0
 	private
@@ -1470,7 +1470,7 @@
 
 
 245
-	The ping pong ball attempted to break the world record for the longest bounce, but it got tired after the third bounce.
+	The ping pong ball attempted to break the world record for the longest bounce but it got tired after the third bounce.
 	142
 	7
 
@@ -1482,19 +1482,19 @@
 	public
 	Lana Pittman
 247
-	The jellyfish joined a support group for creatures without spines, discussing the challenges of not having a backbone.
+	The jellyfish joined a support group for creatures without spines discussing the challenges of not having a backbone.
 	59
 	0
 	public
 	Frank Campbell
 248
-	The talking tree hosted a podcast about the secrets of the forest, with guest appearances from wise old rocks.
+	The talking tree hosted a podcast about the secrets of the forest with guest appearances from wise old rocks.
 	67
 	2
 	private
 	Lois Bernard
 249
-	The rubber band rebellion demanded equal stretching rights for all bands, regardless of elasticity.
+	The rubber band rebellion demanded equal stretching rights for all bands regardless of elasticity.
 	41
 	4
 
@@ -1512,13 +1512,13 @@
 
 
 252
-	The sock drawer organized a protest against mismatching socks, advocating for equal pair rights.
+	The sock drawer organized a protest against mismatching socks advocating for equal pair rights.
 	113
 	2
 	public
 	Astrid Cantrell
 253
-	The pizza delivery guy claimed he could teleport, but it turned out he just had a really fast scooter.
+	The pizza delivery guy claimed he could teleport but it turned out he just had a really fast scooter.
 	79
 	3
 
@@ -1536,7 +1536,7 @@
 
 
 256
-	The cactus opened a spa for stressed-out succulents, offering prickly relaxation treatments.
+	The cactus opened a spa for stressed-out succulents offering prickly relaxation treatments.
 	6
 	3
 	private
@@ -1548,19 +1548,19 @@
 	public
 	Bonnie Reeves
 258
-	The superhero broccoli fought against the evil candy corn, promoting a balanced diet.
+	The superhero broccoli fought against the evil candy corn promoting a balanced diet.
 	129
 	3
 
 
 259
-	The rubber chicken became the CEO of a rubber products company, leading the charge for bouncy innovation.
+	The rubber chicken became the CEO of a rubber products company leading the charge for bouncy innovation.
 	109
 	1
 
 
 260
-	The potato chip bag staged a rebellion against being crumpled, demanding respect for its snacky contents.
+	The potato chip bag staged a rebellion against being crumpled demanding respect for its snacky contents.
 	52
 	0
 
@@ -1596,13 +1596,13 @@
 	public
 	Jana Edwards
 266
-	The marshmallow decided to become a stand-up comedian, telling sweet and fluffy jokes.
+	The marshmallow decided to become a stand-up comedian telling sweet and fluffy jokes.
 	78
 	1
 	public
 	Connor Norris
 267
-	The rubber ducky organized a flotation device protest, demanding better treatment in the bathtub.
+	The rubber ducky organized a flotation device protest demanding better treatment in the bathtub.
 	100
 	5
 
@@ -1614,7 +1614,7 @@
 
 
 269
-	The kite formed a rebellion against gravity, attempting to float away to a land of eternal breezes.
+	The kite formed a rebellion against gravity attempting to float away to a land of eternal breezes.
 	68
 	0
 	public
@@ -1632,7 +1632,7 @@
 
 
 272
-	The rubber chicken started a dance craze called the "Chicken Cha-Cha," taking barnyards by storm.
+	The rubber chicken started a dance craze called the "Chicken Cha-Cha" taking barnyards by storm.
 	132
 	5
 	public
@@ -1656,7 +1656,7 @@
 
 
 276
-	The jellybean became a motivational speaker, encouraging others to embrace their inner sweetness.
+	The jellybean became a motivational speaker encouraging others to embrace their inner sweetness.
 	130
 	6
 
@@ -1692,19 +1692,19 @@
 
 
 282
-	The spaghetti noodle rebelled against the pasta pot, demanding the right to choose its own sauce.
+	The spaghetti noodle rebelled against the pasta pot demanding the right to choose its own sauce.
 	29
 	1
 	private
 	Yuan Wuhan
 283
-	The rubber band ball became the mayor of the desk drawer, promoting office supply unity.
+	The rubber band ball became the mayor of the desk drawer promoting office supply unity.
 	80
 	2
 
 
 284
-	The pancake stack formed a pancake pyramid scheme, with each pancake recruiting more breakfast items.
+	The pancake stack formed a pancake pyramid scheme with each pancake recruiting more breakfast items.
 	61
 	6
 
@@ -1722,7 +1722,7 @@
 	private
 	Song Long
 287
-	The rubber ducky organized a protest against bath time, advocating for more playtime in the tub.
+	The rubber ducky organized a protest against bath time advocating for more playtime in the tub.
 	19
 	5
 	private
@@ -1734,13 +1734,13 @@
 	public
 	Astrid Cantrell
 289
-	The potato chip bag started a rebellion against being folded, demanding freedom for its crispy contents.
+	The potato chip bag started a rebellion against being folded demanding freedom for its crispy contents.
 	117
 	1
 	private
 	Vasuki Kaamat
 290
-	The feather duster became a superhero, using its dusting powers to defeat evil dust bunnies.
+	The feather duster became a superhero using its dusting powers to defeat evil dust bunnies.
 	12
 	1
 	public
@@ -1752,7 +1752,7 @@
 	public
 	Lakshmi Vyas
 292
-	The talking sock hosted a podcast about the secret lives of socks, featuring exclusive interviews with sock celebrities.
+	The talking sock hosted a podcast about the secret lives of socks featuring exclusive interviews with sock celebrities.
 	81
 	2
 	private
@@ -1764,25 +1764,25 @@
 
 
 294
-	The rubber duck organized a duck parade in the bathtub, featuring floats made of soap bubbles.
+	The rubber duck organized a duck parade in the bathtub featuring floats made of soap bubbles.
 	112
 	2
 	public
 	Joyce Baldwin
 295
-	The marshmallow became a life coach for other confectioneries, offering sweet advice on life's challenges.
+	The marshmallow became a life coach for other confectioneries offering sweet advice on life's challenges.
 	87
 	3
 
 
 296
-	The rubber band declared itself the ruler of the office, demanding loyalty from all stationery supplies.
+	The rubber band declared itself the ruler of the office demanding loyalty from all stationery supplies.
 	119
 	0
 	public
 	Jana Edwards
 297
-	The kazoo formed a band with the harmonica and accordion, creating a cacophony of comedic music.
+	The kazoo formed a band with the harmonica and accordion creating a cacophony of comedic music.
 	31
 	1
 	public
@@ -1824,7 +1824,7 @@
 
 
 304
-	3. Started a support group for people who forget what day it is. First meeting is tomorrow, or maybe it was yesterday?
+	3. Started a support group for people who forget what day it is. First meeting is tomorrow or maybe it was yesterday?
 	12
 	2
 	public
@@ -1872,7 +1872,7 @@
 	private
 	Helena Carpenter
 312
-	7. Dropped my sandwich on the floor, and it landed peanut butter side up. Today, I am the chosen one.
+	7. Dropped my sandwich on the floor and it landed peanut butter side up. Today I am the chosen one.
 	31
 	1
 	public
@@ -1896,13 +1896,13 @@
 	private
 	Eliot Moses
 316
-	9. Decided to become a professional nap-taker. It's a tough job, but someone has to do it.
+	9. Decided to become a professional nap-taker. It's a tough job but someone has to do it.
 	62
 	0
 	private
 	Lois Bernard
 317
-	Found a genie lamp, but my three wishes were all for more wishes. Now I'm drowning in infinite wishes. Oops?
+	Found a genie lamp but my three wishes were all for more wishes. Now I'm drowning in infinite wishes. Oops?
 	53
 	1
 
@@ -1962,7 +1962,7 @@
 	public
 	Lois Bernard
 327
-	Decided to organize my sock drawer by personality. Turns out, my socks have more character than I thought.
+	Decided to organize my sock drawer by personality. Turns out my socks have more character than I thought.
 	93
 	6
 	public
@@ -2010,13 +2010,13 @@
 
 
 335
-	Taught my dog how to fetch the newspaper, but it came back as a paper-mâché sculpture. Close enough.
+	Taught my dog how to fetch the newspaper but it came back as a paper-mâché sculpture. Close enough.
 	134
 	0
 	public
 	Melody Cabrera
 336
-	Attempted to create a time machine using a microwave and a clock. Dinner was ruined, but at least it wasn't time-traveling.
+	Attempted to create a time machine using a microwave and a clock. Dinner was ruined but at least it wasn't time-traveling.
 	87
 	3
 
@@ -2058,13 +2058,13 @@
 
 
 343
-	Decided to become a professional cloud-watcher. The sky's the limit, literally.
+	Decided to become a professional cloud-watcher. The sky's the limit literally.
 	85
 	5
 
 
 344
-	Found a way to turn ordinary socks into sock puppets. Sock puppet theater, here I come!
+	Found a way to turn ordinary socks into sock puppets. Sock puppet theater here I come!
 	140
 	6
 	public
@@ -2196,7 +2196,7 @@
 	private
 	Arianna Lozano
 366
-	Launched a campaign to replace handshakes with high-fives. Germs, meet enthusiasm!
+	Launched a campaign to replace handshakes with high-fives. Germs meet enthusiasm!
 	82
 	1
 	public
@@ -2232,7 +2232,7 @@
 
 
 372
-	Tried to teach my cat to solve a Rubik's Cube. The cube remains unsolved, and the cat is napping.
+	Tried to teach my cat to solve a Rubik's Cube. The cube remains unsolved and the cat is napping.
 	31
 	4
 	private
@@ -2256,7 +2256,7 @@
 
 
 376
-	Launched a campaign to replace all doorbells with personalized jingles. Ding-dong, sing along!
+	Launched a campaign to replace all doorbells with personalized jingles. Ding-dong sing along!
 	139
 	1
 	private
@@ -2280,7 +2280,7 @@
 
 
 380
-	Decided to become a professional pillow fluffer. Sweet dreams, fluff enthusiasts!
+	Decided to become a professional pillow fluffer. Sweet dreams fluff enthusiasts!
 	26
 	6
 
@@ -2298,7 +2298,7 @@
 	public
 	Constance Byrd
 383
-	Attempted to break the record for the longest time spent balancing a spoon on my nose while reciting Shakespeare. Alas, poor Yorick!
+	Attempted to break the record for the longest time spent balancing a spoon on my nose while reciting Shakespeare. Alas poor Yorick!
 	144
 	1
 	private
@@ -2346,19 +2346,19 @@
 
 
 391
-	Found a way to turn daydreaming into an Olympic sport. Gold medal in imagination, please!
+	Found a way to turn daydreaming into an Olympic sport. Gold medal in imagination please!
 	58
 	6
 
 
 392
-	Tried to teach my dog how to whistle. Turns out, that's a skill reserved for humans.
+	Tried to teach my dog how to whistle. Turns out that's a skill reserved for humans.
 	93
 	2
 	public
 	Zakir Jennings
 393
-	Invented a game called "The Great Sock Migration." Socks travel in pairs, seeking warmer climates.
+	Invented a game called "The Great Sock Migration." Socks travel in pairs seeking warmer climates.
 	134
 	4
 
@@ -2370,7 +2370,7 @@
 	private
 	Alina Baird
 395
-	Launched a petition to add "Nap Time" to the official work schedule. Productivity would skyrocket, obviously.
+	Launched a petition to add "Nap Time" to the official work schedule. Productivity would skyrocket obviously.
 	143
 	3
 
@@ -2394,13 +2394,13 @@
 	private
 	Ellie-Mae Vega
 399
-	Invented a game called "The Silent Sing-Along." Lips move, but no sound comes out.
+	Invented a game called "The Silent Sing-Along." Lips move but no sound comes out.
 	139
 	7
 	private
 	Louie Fry
 400
-	Started a campaign to replace all traffic signs with interpretive dance signals. Left turn, jazz hands!
+	Started a campaign to replace all traffic signs with interpretive dance signals. Left turn jazz hands!
 	29
 	0
 	private
@@ -2418,7 +2418,7 @@
 	private
 	Josha Varkey
 403
-	Decided to become a professional cereal box riddler. The mysteries of breakfast, decoded.
+	Decided to become a professional cereal box riddler. The mysteries of breakfast decoded.
 	83
 	1
 	public
