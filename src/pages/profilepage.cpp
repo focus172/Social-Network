@@ -112,6 +112,8 @@ ProfilePage::ProfilePage(Network *network, QWidget *parent)
 }
 
 void ProfilePage::login(User *u) {
+  assert(u != nullptr);
+
   initialUser = u;
   mostRecentUser = u;
 
@@ -127,6 +129,8 @@ void ProfilePage::login(User *u) {
   for (auto itr = uFriends.begin(); itr != uFriends.end(); ++itr) {
     int tempFriendID = *itr;
     User *tempFriend = n->getUser(tempFriendID);
+    assert(tempFriend != nullptr);
+
     std::string name = tempFriend->getName();
     QString qname = QString::fromStdString(name);
     QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
@@ -146,6 +150,8 @@ void ProfilePage::login(User *u) {
   for (int i = 0; i < friendSuggestionsSize; ++i) {
     int friendSuggestionId = friendSuggestions[i];
     User *friendSuggestion = n->getUser(friendSuggestionId);
+    assert(friendSuggestion != nullptr);
+
     std::string name = friendSuggestion->getName();
     QString qname = QString::fromStdString(name);
     QTableWidgetItem *displayedName = new QTableWidgetItem(qname);
@@ -158,8 +164,7 @@ void ProfilePage::login(User *u) {
   std::set<int> friends = u->getFriends();
   for (int friendId : friends) {
     User *friendUser = n->getUser(friendId);
-    if (friendUser == nullptr)
-      continue;
+    assert(friendUser != nullptr);
     totalPosts += friendUser->getPosts().size();
   }
 
@@ -180,9 +185,7 @@ void ProfilePage::login(User *u) {
   // Iterate over all friends
   for (int friendId : friends) {
     User *friendUser = n->getUser(friendId);
-
-    if (friendUser == nullptr)
-      continue;
+    assert(friendUser != nullptr);
 
     // Get all posts from the current friend
     std::vector<Post *> posts = friendUser->getPosts();
@@ -194,13 +197,18 @@ void ProfilePage::login(User *u) {
     QStringList individualPosts =
         QString::fromStdString(postsString).split("\n\n");
 
-    // Iterate over the individualPosts list and insert each post's text into
-    // the table
-    for (int i = 0; i < individualPosts.size(); ++i) {
-      const QString &post = individualPosts[i];
-      Post *postObj =
-          posts[individualPosts.size() - i -
-                1]; // since individualPosts is constructed backwards
+    for (auto postObj : posts) {
+      // // Iterate over the individualPosts list and insert each post's text
+      // into
+      // // the table
+      // for (int i = 0; i < individualPosts.size(); ++i) {
+      //   const QString &post = individualPosts[i];
+
+      //   // since individualPosts is constructed backwards
+      //   Post *postObj = posts[individualPosts.size() - i - 1];
+      //   if (postObj == nullptr)
+      //     continue;
+      //   // assert(postObj != nullptr);
 
       // Create a new QTableWidgetItem with the friend's name
       QTableWidgetItem *nameItem =
@@ -210,6 +218,7 @@ void ProfilePage::login(User *u) {
       ui->postsTable->setItem(currentRow, 0, nameItem);
 
       // Create a new QTableWidgetItem with the post's text
+      auto post = QString::fromStdString(postObj->toString());
       QTableWidgetItem *postItem = new QTableWidgetItem(post);
 
       // Insert the post item into the table at row currentRow, column 1

@@ -23,6 +23,7 @@
 #include <QtWidgets/QWidget>
 
 #include "network/network.h"
+#include "pages/feedpage.h"
 #include "pages/loginpage.h"
 #include "pages/makepostpage.h"
 #include "pages/profilepage.h"
@@ -38,6 +39,7 @@ public:
   LoginPage *loginpage;
   ProfilePage *profilepage;
   MakepostPage *makepostpage;
+  // FeedPage *feedpage;
 
   QMenuBar *menubar;
   QStatusBar *statusbar;

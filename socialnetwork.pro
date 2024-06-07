@@ -16,6 +16,7 @@ SOURCES += \
     src/pages/makepostpage.cpp \
     src/pages/loginpage.cpp \
     src/pages/profilepage.cpp \
+    # src/pages/feedpage.cpp \
     src/socialnetworkwindow.cpp
 
 HEADERS += \
@@ -25,6 +26,7 @@ HEADERS += \
     src/pages/makepostpage.h \
     src/pages/loginpage.h \
     src/pages/profilepage.h \
+    # src/pages/feedpage.h \
     src/socialnetworkwindow.h
 
 # Default rules for deployment.

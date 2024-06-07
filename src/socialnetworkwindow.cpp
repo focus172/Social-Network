@@ -24,6 +24,9 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   makepostpage = new MakepostPage(centralwidget);
   viewstack->addWidget(makepostpage);
 
+  // feedpage = new FeedPage(network, centralwidget);
+  // viewstack->addWidget(feedpage);
+
   grid->addWidget(viewstack, 0, 0);
   SocialNetworkWindow->setCentralWidget(centralwidget);
   /* ************** End Page Setup *************** */
@@ -59,6 +62,10 @@ SocialNetworkWindow::SocialNetworkWindow()
   }
 
   ui = new SocialNetworkWindowUi(this, &network);
+
+  // auto u = network.getUser(0);
+  // this->ui->feedpage->show_user(u);
+  // this->ui->viewstack->setCurrentIndex(3);
 
   // ui->profile_friends_table->setColumnCount(1);
 
@@ -118,8 +125,8 @@ void SocialNetworkWindow::showprofile(int newuser) {
 
   if (ui->viewstack->currentIndex() == 0) {
     // if we are comming here from a new the login page we need to update this
-    ui->viewstack->setCurrentIndex(1);
     ui->profilepage->login(u);
+    ui->viewstack->setCurrentIndex(1);
   }
 
   this->user.select(u, this->curr.id);
