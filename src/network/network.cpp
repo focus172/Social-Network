@@ -2,8 +2,6 @@
 #include "post.h"
 #include "user.h"
 
-#include "../util.h"
-
 #include <algorithm>
 #include <assert.h>
 #include <cstddef>
@@ -185,8 +183,10 @@ int read_links(FILE *f, std::set<int> &set) {
 
 int Network::read_users_csv(const char *fname) {
   auto f = fopen(fname, "r");
-  if (!f)
+  if (!f) {
+    printf("cant open file: %s\n", fname);
     return -1;
+  }
 
   for (;;) {
     int r;
@@ -230,8 +230,10 @@ int Network::read_users_csv(const char *fname) {
 int Network::write_users_csv(const char *fname) {
   std::ofstream f = std::ofstream();
   f.open(fname);
-  if (!f.is_open())
+  if (!f.is_open()) {
+    printf("cant open file: %s\n", fname);
     return -1;
+  }
 
   for (auto u : this->users_) {
     f << u->getId() << ",";
@@ -365,8 +367,10 @@ std::string Network::getPostsString(int ownerId, int howMany,
 
 int Network::read_posts_csv(const char *fname) {
   auto f = fopen(fname, "r");
-  if (!f)
+  if (!f) {
+    printf("cant open file: %s\n", fname);
     return -1;
+  }
 
   for (;;) {
     // 2: messageId_0
@@ -416,18 +420,23 @@ int Network::read_posts_csv(const char *fname) {
 }
 
 int Network::write_posts_csv(const char *fname) {
+  return 0;
   std::ofstream f = std::ofstream();
   f.open(fname);
-  if (!f.is_open())
+  if (!f.is_open()) {
+    printf("cant open file: %s\n", fname);
     return -1;
+  }
 
   for (User *user : this->users_) {
     for (Post *post : user->getPosts()) {
       f << post->getMessageId() << ",";
       f << post->getMessage() << ",";
       f << post->getOwnerId() << ",";
-      // post->getLiked();
-      f << post->getLikes() << ",";
+      for (auto id : post->getLiked()) {
+        f << id << " ";
+      }
+      f << ",";
 
       IncomingPost *ip = dynamic_cast<IncomingPost *>(post);
       if (ip == nullptr) {

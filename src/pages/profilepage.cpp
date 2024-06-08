@@ -440,7 +440,7 @@ void ProfilePage::addAsFriend() {
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+
 void ProfilePage::likePost(int row, int messageId, int userId) {
   Post *post = n->getPost(messageId);
 

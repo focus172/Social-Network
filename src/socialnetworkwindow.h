@@ -39,7 +39,7 @@ public:
   LoginPage *loginpage;
   ProfilePage *profilepage;
   MakepostPage *makepostpage;
-  // FeedPage *feedpage;
+  FeedPage *feedpage;
 
   QMenuBar *menubar;
   QStatusBar *statusbar;
@@ -93,11 +93,6 @@ public:
   void show_makepost();
 
   void add_post(Post *p);
-
-  void gohome();
-  void gofriend(int row, int col);
-  void addfriend();
-  void addsuggestedfriend(int row, int col);
 
 private:
   SocialNetworkWindowUi *ui;

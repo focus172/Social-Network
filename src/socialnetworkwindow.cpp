@@ -24,8 +24,8 @@ SocialNetworkWindowUi::SocialNetworkWindowUi(QMainWindow *SocialNetworkWindow,
   makepostpage = new MakepostPage(centralwidget);
   viewstack->addWidget(makepostpage);
 
-  // feedpage = new FeedPage(network, centralwidget);
-  // viewstack->addWidget(feedpage);
+  feedpage = new FeedPage(network, centralwidget);
+  viewstack->addWidget(feedpage);
 
   grid->addWidget(viewstack, 0, 0);
   SocialNetworkWindow->setCentralWidget(centralwidget);
@@ -67,11 +67,6 @@ SocialNetworkWindow::SocialNetworkWindow()
   // this->ui->feedpage->show_user(u);
   // this->ui->viewstack->setCurrentIndex(3);
 
-  // ui->profile_friends_table->setColumnCount(1);
-
-  // ui->profile_home->hide();
-  // ui->profile_add->hide();
-
   // auto p = new Post();
   // auto post = new postwidget(p, &this->curr.id, ui->loginpage);
   // ui->gridLayout_2->addWidget(post);
@@ -80,23 +75,11 @@ SocialNetworkWindow::SocialNetworkWindow()
   QObject::connect(ui->loginpage, &LoginPage::loggedin, this,
                    &SocialNetworkWindow::showprofile);
 
-  // profile ports
+  // ports in out
   QObject::connect(ui->profilepage, &ProfilePage::gomakepost, this,
                    &SocialNetworkWindow::show_makepost);
-
-  // make post connection
   QObject::connect(ui->makepostpage, &MakepostPage::submit_post, this,
                    &SocialNetworkWindow::add_post);
-
-  // QObject::connect(ui->profile_home, &QPushButton::clicked, this,
-  //                  &SocialNetworkWindow::gohome);
-  // QObject::connect(ui->profile_add, &QPushButton::clicked, this,
-  //                  &SocialNetworkWindow::addfriend);
-  // QObject::connect(ui->profile_friends_table, &QTableWidget::cellClicked,
-  // this,
-  //                  &SocialNetworkWindow::gofriend);
-  // QObject::connect(ui->profile_suggested_table, &QTableWidget::cellClicked,
-  //                  this, &SocialNetworkWindow::addsuggestedfriend);
 }
 
 SocialNetworkWindow::~SocialNetworkWindow() { delete ui; }
@@ -114,7 +97,6 @@ void SocialNetworkWindow::add_post(Post *p) {
     return;
   }
 
-  // printf("TODO: fix post not being added by uncommenting next line\n");
   u->addPost(p);
   network.write_posts_csv("etc/posts.csv");
   this->ui->viewstack->setCurrentIndex(1);
@@ -187,69 +169,4 @@ void SocialNetworkWindow::showprofile(int newuser) {
   // }
 
   // ui->profile_post_list->setModel(user.model);
-}
-
-void SocialNetworkWindow::gohome() {
-  // SocialNetworkWindow::showprofile(this->curr.id);
-}
-
-void SocialNetworkWindow::gofriend(int row, int col) {
-  (void)row;
-  (void)col;
-
-  // assert(col == 0);
-
-  // User *u = this->network.getUser(this->user.id);
-  // auto fr = u->getFriends();
-
-  // int show = -1;
-  // int index = 0;
-  // for (int f : fr) {
-  //   if (index == row) {
-  //     show = f;
-  //     break;
-  //   }
-  //   index += 1;
-  // }
-  // if (show < 0)
-  //   return;
-
-  // SocialNetworkWindow::showprofile(show);
-}
-
-void SocialNetworkWindow::addsuggestedfriend(int row, int col) {
-  (void)row;
-  (void)col;
-  // User *u = this->network.getUser(this->user.id);
-  // thrownull(u);
-
-  // auto it = ui->profile_suggested_table->item(row, col);
-  // auto text = it->text();
-  // int s = this->network.getId(text.toStdString());
-
-  // User *f = this->network.getUser(s);
-  // thrownull(u);
-
-  // u->addFriend(s);
-  // f->addFriend(u->getId());
-
-  // this->network.writeUsers("users.txt");
-
-  // SocialNetworkWindow::showprofile(this->user.id);
-}
-
-void SocialNetworkWindow::addfriend() {
-  // User *u = this->network.getUser(this->curr.id);
-  // thrownull(u);
-  // User *f = this->network.getUser(this->user.id);
-  // thrownull(f);
-
-  // u->addFriend(this->user.id);
-  // f->addFriend(this->curr.id);
-
-  // this->network.writeUsers("users.txt");
-
-  // this->ui->profile_add->hide();
-
-  // SocialNetworkWindow::showprofile(this->user.id);
 }
